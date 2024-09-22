@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 19:59:29 by sebasari          #+#    #+#             */
-/*   Updated: 2023/10/20 16:48:32 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/16 10:23:57 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	ft_putstr_fd(char *s, int fd)
 	int	i;
 
 	i = 0;
+	if (!s || fd < 0)
+		return ;
 	while (s[i])
 	{
 		write(fd, &s[i], 1);

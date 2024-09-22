@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 16:47:24 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/18 16:48:59 by murathanelc      ###   ########.fr       */
+/*   Updated: 2024/09/15 14:35:34 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@ char	*ft_find_command_path(char *command)
 	char		*paths;
 	char		*dir;
 	static char	full_path[1024];
-    // getenv -> set, unset, and fetch environment variables from the host environment list
-    // return value of getenv: The getenv() function returns the value of the environment variable as a NUL-terminated
-    // string.  If the variable name is not in the current environment, NULL is returned.
-    path = getenv("PATH");
+	// getenv -> set, unset, and fetch environment variables from the host environment list
+	// return value of getenv: The getenv() function returns the value of the environment variable as a NUL-terminated
+	// string.  If the variable name is not in the current environment, NULL is returned.
+	path = getenv("PATH");
 	if (!path)
 		return (NULL);
 	paths = ft_strdup(path);
-	dir = strtok(paths, ":"); // Tokenized path; ask göktuğ
+	dir = ft_strtok(paths, ":");
 	while (dir != NULL)
 	{
 		snprintf(full_path, sizeof(full_path), "%s/%s", dir, command);
@@ -34,13 +34,13 @@ char	*ft_find_command_path(char *command)
 			free(paths);
 			return (full_path);
 		}
-		dir = strtok(NULL, ":");
+		dir = ft_strtok(NULL, ":");
 	}
 	free(paths);
 	return (NULL);
 }
 
-void	ft_execute_commands(t_token *token)
+void	ft_execute_command(t_minishell *mini)
 {
 	char	**argv;
 	char	*command_path;
@@ -50,10 +50,10 @@ void	ft_execute_commands(t_token *token)
 	int		i;
 	t_list	*temp;
 	
-	temp = token->nodes_t;
-	str = (char *)temp->content;
-	if (token == NULL || str == NULL)
+	temp = mini->nodes_t;
+	if (mini == NULL || (char *)temp->content == NULL)
 		return ;
+	str = (char *)temp->content;
 	command_path = ft_find_command_path(str);
 	if (command_path == NULL)
 	{
@@ -68,7 +68,7 @@ void	ft_execute_commands(t_token *token)
 	}
 	argv = malloc((argc + 1) *  sizeof(char *));
 	i = 0;
-	temp = token->nodes_t;
+	temp = mini->nodes_t;
 	while (i < argc && temp != NULL)
 	{
 		argv[i] = (char *)temp->content;
@@ -92,19 +92,4 @@ void	ft_execute_commands(t_token *token)
 	else
 		wait(NULL); // Parent waits the child
 	free(argv);
-}
-
-void	ft_command(t_token *token)
-{
-	t_list	*temp;
-	char	*str;
-
-	temp = token->nodes_t;
-	str = (char *)temp->content;
-	if (temp == NULL || str == NULL)
-		return ;
-	if (ft_strncmp(str, "ls", ft_strlen(str)) == 0)
-		ft_execute_commands(token);
-	else
-		ft_builtin_commands(token);
 }

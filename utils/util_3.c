@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   util_3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/20 17:30:37 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/20 08:52:04 by sebasari         ###   ########.fr       */
+/*   Created: 2024/09/15 17:25:43 by sebasari          #+#    #+#             */
+/*   Updated: 2024/09/20 14:47:21 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-static size_t	ft_word_count(const char *s, char c)
+static size_t	ft_word_count(char *s, char c)
 {
 	size_t	num;
+	char	*str;
 
 	num = 0;
 	while (*s)
 	{
-		if (*s != c)
+		if (ft_is_quotes_there_index(*s))
+		{
+			str = s;
+			s += ft_find_next_q(0, str) + 1;
+			num++;
+		}
+		else if (*s != c)
 		{
 			++num;
 			while (*s && *s != c)
@@ -31,7 +38,7 @@ static size_t	ft_word_count(const char *s, char c)
 	return (num);
 }
 
-char	**ft_split(const char *s, char c)
+char	**ft_split_adjusted(char *s, char c)
 {
 	char	**ret;
 	size_t	i;
@@ -45,17 +52,36 @@ char	**ft_split(const char *s, char c)
 		return (0);
 	while (*s)
 	{
-		if (*s == c)
+		if (ft_is_quotes_there_index(*s))
+			ret[i++] = ft_handle_q(&s);
+		else if (*s == c)
 		{
 			s++;
 			continue ;
 		}
 		len = 0;
-		while (s[len] && s[len] != c)
+		while (s[len] && s[len] != c) 
 			len++;
-		ret[i++] = ft_substr(s, 0, len);
+
+		if (len != 0)
+			ret[i++] = ft_substr(s, 0, len);
 		s += len;
 	}
-	ret[i] = 0;
+	ret[i] = NULL;
 	return (ret);
+}
+
+char *ft_handle_q(char **s)
+{
+	int		size;
+	char	*str;
+	char	*str_1;
+
+	str = (*s);
+	size = ft_find_next_q(0, str) + 1;
+	if (size == 0)
+		return (NULL);
+	(*s) += size;
+	str_1 = ft_substr(str, 0, size);
+	return (str_1);
 }

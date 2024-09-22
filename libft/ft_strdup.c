@@ -6,13 +6,13 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 15:29:59 by sebasari          #+#    #+#             */
-/*   Updated: 2023/10/27 13:04:53 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/16 11:11:05 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(char *src)
+char	*ft_strdup(const char *src)
 {
 	size_t	size;
 	char	*dest;
