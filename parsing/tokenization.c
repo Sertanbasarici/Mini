@@ -52,7 +52,7 @@ int	parse_init(char *input)
 		return (1);
 	mini->token_num = ft_lstprint_t(mini);
 	mini = parse(0, 1, mini);
-	ft_execution_deneme(mini->nodes_p, mini->fd);
+	ft_execution(mini);
 	return (0);
 }
 

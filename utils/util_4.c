@@ -6,7 +6,7 @@
 /*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:20:12 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/21 22:26:45 by murathanelc      ###   ########.fr       */
+/*   Updated: 2024/09/24 16:08:43 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ char	*ft_custom_getenv(char *name)
 	return (ft_calloc(sizeof(char *), 1));
 }
 
-void	ft_update_path(void)
-{
-	char	*path;
+// void	ft_update_path(void)
+// {
+// 	char	*path;
 
-	if (g_minishell.)
-}
+// 	if (g_minishell.)
+// }

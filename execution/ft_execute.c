@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 23:20:49 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/23 14:50:03 by melcuman         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:30:45 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,12 @@ char	*ft_find_command_path(char *command)
 	return (NULL);
 }
 
-void	ft_execute_commands(t_minishell *mini)
+void	ft_execute_execve(t_minishell *mini)
 {
 	char	**argv;
 	char	*command_path;
 	char	*str;
 	int		argc;
-	pid_t	pid;
 	int		i;
 	t_list	*temp;
 	
@@ -106,57 +105,130 @@ void	ft_execute_commands(t_minishell *mini)
 		i++;
 	}
 	argv[argc] = NULL; // last char shoudl be null
-	// Create a child process
-	pid = fork();
-	// Check error
-	if (pid < 0)
-		perror("Fork failed");
-	else if (pid == 0)
+	if (execve(command_path, argv, NULL) == -1)
 	{
-		if (execve(command_path, argv, NULL) == -1)
-		{
-			perror("execve failed");
-			exit(EXIT_FAILURE);
-		}
+		perror("execve failed");
+		exit(EXIT_FAILURE);
 	}
-	else
-		wait(NULL); // Parent waits the child
 	free(argv);
 }
 
-void	ft_builtin_commands(t_minishell *mini)
-{
-	char	*str;
-	char	**input;
+// void	ft_builtin_commands(t_minishell *mini)
+// {
+// 	char	**input;
 
-	input = ft_get_char(mini);
-	if (ft_strncmp(input[0], "pwd", ft_strlen(str)) == 0)
-		ft_pwd(*input);
-	else if (ft_strncmp(input[0], "echo", ft_strlen(str)) == 0)
-		ft_echo(input);
-	else if (ft_strncmp(input[0], "cd", ft_strlen("cd")) == 0)
-		ft_cd(input);
-	else if (ft_strncmp(input[0], "env", ft_strlen("env")) == 0)
-		ft_env(input);
-	else if (ft_strncmp(input[0], "export", ft_strlen("export")) == 0)
-		ft_export(input);
-	else if (ft_strncmp(input[0], "unset", ft_strlen("unset")) == 0)
-		ft_unset(input);
-	else if (ft_strncmp(input[0], "exit", ft_strlen(str)) == 0)
-		ft_exit(input);
+// 	input = ft_get_char(mini);
+// 	if (ft_strncmp(input[0], "pwd", ft_strlen(str)) == 0)
+// 		ft_pwd(*input);
+// 	else if (ft_strncmp(input[0], "echo", ft_strlen(str)) == 0)
+// 		ft_echo(input);
+// 	else if (ft_strncmp(input[0], "cd", ft_strlen("cd")) == 0)
+// 		ft_cd(input);
+// 	else if (ft_strncmp(input[0], "env", ft_strlen("env")) == 0)
+// 		ft_env(input);
+// 	else if (ft_strncmp(input[0], "export", ft_strlen("export")) == 0)
+// 		ft_export(input);
+// 	else if (ft_strncmp(input[0], "unset", ft_strlen("unset")) == 0)
+// 		ft_unset(input);
+// 	else if (ft_strncmp(input[0], "exit", ft_strlen(str)) == 0)
+// 		ft_exit(input);
+// }
+
+void	ft_execute_commands(t_minishell *mini, int flag)
+{
+	if (mini->file == NULL)
+	{
+		ft_execve_or_builtin(mini);
+		if (flag == 0)
+			ft_return_fd(mini);
+		else
+			dup2(mini->nodes_p->in_file, STDIN_FILENO);
+		return ;
+	}
+	while (mini->file != NULL)
+	{
+		if (mini->file->type == GREATER)
+			; // redirect in
+		else if (mini->file->type == SMALLER)
+			; // redirect out
+		else if (mini->file->type == APPEND)
+			; // append
+		else if (mini->file->type == HERE_DOC)
+			ft_heredoc(mini, mini->nodes_p, &mini->file, &mini->fd);
+		if (mini->file == NULL && mini->nodes_p->next == NULL)
+			ft_return_fd(mini);
+	}
+}
+
+void	ft_execve_or_builtin(t_minishell *mini)
+{
+	pid_t	pid;
+	int		type;
+	char	**str;
+
+	type = ft_builtin_or_not(mini->nodes_p->args[0]);
+	str = mini->nodes_p->args;
+	if (mini->token_num == 1 && type != 0)
+	{
+		ft_execute_builtins(str);
+		return ;
+	}
+	// signal();
+	pid = fork();
+	if (pid == 0)
+	{
+		if (type != 0)
+		{
+			ft_execute_builtins(str);
+			exit(0);
+		}
+		else
+			ft_execute_execve(mini);
+	}
+	return ;
 }
 
 void	ft_command(t_minishell *mini)
 {
-	t_list	*temp;
+	// int	type; // sinyal kısmıyla alakalı
+	int	flag;
+
+	// type = ft_builtin_or_not(mini->nodes_p->args[0]); bu kısımda sinyallerle ilgili //
+	flag = 0;
+	if (mini->nodes_p->next != NULL)
+	{
+		flag = 1;
+		ft_handle_pipe(mini, flag);
+	}
+	else
+		ft_execute_commands(mini, flag);
+	// handle signals later //
+}
+
+void	ft_dup_fd(t_minishell *mini, t_parse *parse)
+{
+	if (parse->args[0])
+	{
+		parse->in_file = dup(mini->fd->in);
+		parse->out_file = dup(mini->fd->out);
+	}
+	mini->fd->in = dup(STDIN_FILENO);
+	mini->fd->out = dup(STDOUT_FILENO);
+}
+
+void	ft_execution(t_minishell *mini)
+{
+	t_parse	*parse;
 	char	*str;
 
-	temp = mini->nodes_t;
-	str = (char *)temp->content;
-	if (temp == NULL || str == NULL)
+	parse = mini->nodes_p;
+	str = (char *)mini->nodes_t->content;
+	if (mini->nodes_t == NULL || str == NULL)
 		return ;
-	if (ft_strncmp(str, "ls", ft_strlen(str)) == 0)
-		ft_execute_commands(mini);
-	else
-		ft_builtin_commands(mini);
+	ft_dup_fd(mini, parse);
+	// if (ft_strncmp(str, "ls", ft_strlen(str)) == 0)
+	// 	ft_execute_commands(mini);
+	// else
+	// 	ft_builtin_commands(mini);
+	ft_command(mini);
 }
