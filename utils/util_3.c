@@ -3,85 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   util_3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 17:25:43 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/20 14:47:21 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/21 14:25:04 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static size_t	ft_word_count(char *s, char c)
+void printCharArray(char **array)
 {
-	size_t	num;
-	char	*str;
-
-	num = 0;
-	while (*s)
+	int i = 0;
+	while (array[i] != NULL)
 	{
-		if (ft_is_quotes_there_index(*s))
-		{
-			str = s;
-			s += ft_find_next_q(0, str) + 1;
-			num++;
-		}
-		else if (*s != c)
-		{
-			++num;
-			while (*s && *s != c)
-				++s;
-		}
-		else
-			++s;
+		printf("%s\n", array[i]);
+		i++;
 	}
-	return (num);
 }
 
-char	**ft_split_adjusted(char *s, char c)
+int	ft_controll_qoutes(char *str)
 {
-	char	**ret;
-	size_t	i;
-	size_t	len;
+	int	i;
 
-	if (!s)
-		return (0);
 	i = 0;
-	ret = malloc(sizeof(char *) * (ft_word_count(s, c) + 1));
-	if (!ret)
-		return (0);
-	while (*s)
+	while (str[i])
 	{
-		if (ft_is_quotes_there_index(*s))
-			ret[i++] = ft_handle_q(&s);
-		else if (*s == c)
-		{
-			s++;
-			continue ;
-		}
-		len = 0;
-		while (s[len] && s[len] != c) 
-			len++;
-
-		if (len != 0)
-			ret[i++] = ft_substr(s, 0, len);
-		s += len;
+		if (str[i] == '"' || str[i] == '\'')
+			return (1);
+		i++;
 	}
-	ret[i] = NULL;
-	return (ret);
+	return (0);
 }
 
-char *ft_handle_q(char **s)
+int	ft_special_type_index(char c)
 {
-	int		size;
-	char	*str;
-	char	*str_1;
 
-	str = (*s);
-	size = ft_find_next_q(0, str) + 1;
-	if (size == 0)
-		return (NULL);
-	(*s) += size;
-	str_1 = ft_substr(str, 0, size);
-	return (str_1);
+	if (c == '<' || c == '>' || c == '|')
+			return (1);
+	return (0);
+}
+
+int	ft_updated_strchr(char *str, int c)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	ft_modify_string(char **old, char **new)
+{
+	free(*old);
+	*old = ft_strdup(*new);
+	free(*new);
 }

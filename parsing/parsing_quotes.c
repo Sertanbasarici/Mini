@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_quotes.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:44:46 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/20 14:40:21 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/19 19:02:54 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,16 @@ int	ft_find_next_q(int start, char *input)
 	if (input[start] == '\'')
 	{
 		next_q++;
+		if (ft_single_quotes_finised(input, start))
+			ft_error();
 		while (input[next_q] != '\'' && input[next_q] != '\n' && input[next_q] != '\0')
 			next_q++;
 	}
 	else if (input[start] == '\"')
 	{
 		next_q++;
+		if (ft_double_quotes_finised(input, start))
+			ft_error();
 		while (input[next_q] != '\"' && input[next_q] != '\n' && input[next_q] != '\0')
 			next_q++;
 	}
@@ -114,10 +118,14 @@ t_list	*add_q_to_nodes(int *index, char *input, t_list *mini_list)
 int	ft_is_quotes_there_index(char c)
 {
 	
-	if (c == '\0')
+	if (c == '\0') {
+		printf("%c \n", c);
 		return (0);
-	if (c == '\'')
+	}
+	if (c == '\''){
+		printf("%c \n", c);
 		return (1);
+	}
 	else if (c == '\"')
 		return (1);
 	return (0);

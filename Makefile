@@ -9,14 +9,27 @@ SRC = 	./parsing/tokenization.c \
 		./parsing/token_special_1.c \
 		./parsing/parse.c \
 		./parsing/syntax_controll.c \
+		./parsing/ft_expand_envp.c \
 		./utils/single_quotes.c \
-		./utils/util_1.c \
+		./utils/util.c \
 		./utils/util_2.c \
 		./utils/util_3.c \
-		./utils/util_4.c \
 		./utils/double_quotes.c \
+		./utils/ft_minishell_init.c \
+		./utils/ft_exit_bits.c \
+		./commands/ft_cd.c \
+		./commands/ft_echo.c \
+		./commands/ft_env.c \
+		./commands/ft_exit.c \
+		./commands/ft_export.c \
+		./commands/ft_pwd.c \
+		./commands/ft_unset.c \
+		./execution/ft_execute.c \
+		./execution/ft_builtins.c \
+		./execution/ft_execution.c \
+		./execution/ft_heredoc.c \
+		./execution/ft_heredoc_utils.c \
 		./init.c \
-		./ft_exec.c \
 		./main.c
 
 OBJS = $(SRC:.c=.o)
@@ -39,5 +52,5 @@ re: fclean all
 
 .PHONY: all re clean fclean
 
-valgrind: re
-	@valgrind -s --leak-check=full --show-leak-kinds=all --log-file=output.log ./minishell
+# valgrind: re
+# 	@valgrind -s --leak-check=full --show-leak-kinds=all --log-file=output.log ./minishell

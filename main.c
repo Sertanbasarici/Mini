@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 12:27:07 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/15 14:16:03 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/23 15:06:12 by melcuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// global değişken
+t_minishell	g_minishell;
 
 int	check_if_empty(char *str)
 {
@@ -26,12 +29,13 @@ int	check_if_empty(char *str)
 	return (1);
 }
 
-int main(int argc, char **argv)
+int main(int argc, char **argv, char **envp)
 {
 	char	*input;
 
 	(void)argc;
 	(void)argv;
+	ft_init(envp);
 	while (1) 
 	{
 		input = readline("minishell$ ");

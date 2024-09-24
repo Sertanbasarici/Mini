@@ -1,47 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util_4.c                                           :+:      :+:    :+:   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/21 22:20:12 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/21 22:26:45 by murathanelc      ###   ########.fr       */
+/*   Created: 2024/09/19 22:58:28 by murathanelc       #+#    #+#             */
+/*   Updated: 2024/09/21 15:48:45 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern t_minishell	g_minishell;
-
-// getenv functions but customized version
-char	*ft_custom_getenv(char *name)
+// unset (removing environment elements)
+void	ft_remove_var(char *str)
 {
-	char	*new_str;
+	char	**updated_env;
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 0;
-	new_str = ft_strjoin(name, "=");
+	updated_env = ft_calloc(sizeof(char *), ft_number_of_envp_var() + 1);
 	while (g_minishell.envp[i])
 	{
-		if (ft_strncmp(g_minishell.envp[i], new_str, ft_strlen(new_str)) == 0)
+		if (ft_strncmp(g_minishell.envp[i], str, ft_strlen(str)))
 		{
-			while(g_minishell.envp[i][j] != '=')
-				j++;
-			free(new_str);
-			return (ft_strdup(g_minishell.envp[i][j + 1]));
+			updated_env[j] = ft_strdup(g_minishell.envp[i]);
+			j++;
 		}
 		i++;
 	}
-	free(new_str);
-	return (ft_calloc(sizeof(char *), 1));
+	updated_env[j] = NULL;
+	ft_free_array(g_minishell.envp);
+	g_minishell.envp = updated_env;
 }
 
-void	ft_update_path(void)
+void	ft_unset(char **input)
 {
-	char	*path;
+	char	*str;
 
-	if (g_minishell.)
+	input++;
+	while (*input)
+	{
+		str = ft_strjoin(*input, "=");
+		ft_remove_var(str);
+		free(str);
+		input++;
+	}
 }

@@ -12,17 +12,12 @@
 
 #include "minishell.h"
 
-int	ft_control_token(t_minishell *mini)
+void	ft_control_token(t_minishell *mini)
 {
 	int			i;
 	char		*str;
 	t_list		*tmp;
 
-	if (check_for_q(mini))
-	{
-		print_error(NULL, "error: unifinished quotes\n", 2);
-		return (1);
-	}
 	tmp = mini->nodes_t;
 	while (tmp != NULL)
 	{
@@ -36,7 +31,6 @@ int	ft_control_token(t_minishell *mini)
 		}
 		tmp = tmp->next;
 	}
-	return (0);
 }
 
 int	parse_init(char *input)
@@ -49,17 +43,16 @@ int	parse_init(char *input)
 	mini->nodes_t->next = NULL;
 	input = ft_tab_to_space(input);
 	input = ft_strtrim(input, " ");
-	str = ft_split_adjusted(input, ' ');
+	str = ft_split(input, ' ');
 	mini = ft_tokanazition(str, mini);
 	ft_split_free(str);
 	mini = ft_assign_special_type(mini);
-	if (ft_control_token(mini))
-		return (1);
+	ft_control_token(mini);
 	if (ft_syntax_check(mini))
 		return (1);
 	mini->token_num = ft_lstprint_t(mini);
 	mini = parse(0, 1, mini);
-	ft_execute_command(mini);
+	ft_execution_deneme(mini->nodes_p, mini->fd);
 	return (0);
 }
 
@@ -70,7 +63,7 @@ t_minishell	*ft_tokanazition(char **str, t_minishell *mini)
 	t_list *new;
 
 	j = 0;
-	i =  0;
+	i = 0;
 	while (str[i])
 	{
 		if (ft_special_type(str[i]))

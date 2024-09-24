@@ -1,31 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util_1.c                                           :+:      :+:    :+:   */
+/*   util.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 15:08:44 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/20 15:40:02 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/20 22:36:50 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-void ft_split_free(char **str)
-{
-	int	i = 0;
 
-	if (str == NULL)
-		return;
+// free split
+void	ft_split_free(char **str)
+{
+	int	i;
+
+	i = 0;
 	while (str[i])
-	{
-		free(str[i]);
-		str[i] = NULL;
-		i++;
-	}
+		free(str[i++]);
 	free(str);
 }
 
+void	ft_error()
+{
+	printf("error\n");
+	exit(1);
+}
 
 int	ft_lstprint_t(t_minishell *mini)
 {
@@ -36,7 +38,7 @@ int	ft_lstprint_t(t_minishell *mini)
 	tmp = mini->nodes_t;
 	while (tmp != NULL)
 	{
-//		printf("%s index:%d type:%d\n", (char *)tmp->content, tmp->index, tmp->type);
+		//printf("%s index:%d type:%d\n", (char *)tmp->content, tmp->index, tmp->type);
 		tmp = tmp->next;
 		i++;
 	}
@@ -59,6 +61,7 @@ int	ft_get_size_double_point(char **str)
 	return (size);
 }
 
+// print error message
 void	print_error(char *arg, char *message, int exit_status)
 {
 	char	*str;
@@ -66,18 +69,4 @@ void	print_error(char *arg, char *message, int exit_status)
 	str = ft_strjoin(arg, message);
 	ft_putstr_fd(str, exit_status);
 	free(str);
-}
-
-int	ft_find_starting_index_of_q(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (ft_is_quotes_there_index(str[i]))
-			return (i);
-		i++;
-	}
-	return (0);
 }

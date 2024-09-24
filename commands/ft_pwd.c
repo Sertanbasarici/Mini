@@ -1,18 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 10:58:15 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/23 15:06:31 by melcuman         ###   ########.fr       */
+/*   Created: 2024/09/19 19:00:24 by murathanelc       #+#    #+#             */
+/*   Updated: 2024/09/19 19:00:55 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	adjsut_all(char *input)
+// pwd command
+void	ft_pwd(char *str)
 {
-	parse_init(input);
+	char	*pwd;
+	
+	if (ft_strncmp(str, "pwd", ft_strlen(str)) == 0)
+	{
+		pwd = getcwd(NULL, 0);
+		if (pwd != NULL)
+		{
+			printf("%s\n", pwd);
+			free(pwd);
+		}
+		else
+			perror("pwd error");
+	}
+	else
+		return ;
 }

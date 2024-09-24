@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 15:07:59 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/20 14:42:12 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/19 14:07:36 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	ft_special_type(char *input)
 	i = 0;
 	while(input[i])
 	{
-		
 		if (input[i] == '<' || input[i] == '>' || input[i] == '|')
 		{
 			if ((input[i] == '>' && input[i + 1] == '>')

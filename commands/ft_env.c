@@ -1,18 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 10:58:15 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/23 15:06:31 by melcuman         ###   ########.fr       */
+/*   Created: 2024/09/19 22:56:38 by murathanelc       #+#    #+#             */
+/*   Updated: 2024/09/21 15:41:56 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	adjsut_all(char *input)
+void	ft_env(char	**input)
 {
-	parse_init(input);
+	char	**envp;
+
+	envp = g_minishell.envp;
+	if (input[1])
+	{
+		printf("error: No such file or directory.\n");
+		return ;
+	}
+	while (*envp)
+	{
+		printf("%s\n", *envp);
+		envp++;
+	}
 }
