@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:07:13 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/24 21:16:35 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/25 00:22:46 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
+#include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -61,7 +62,8 @@ typedef struct	s_minishell
 }				t_minishell;
 
 int				check_if_empty(char *str);
-
+void			ctr_c(int num);
+void			ctrl_d(char *input);
 // initialize
 void			adjsut_all(char *input);
 
