@@ -12,12 +12,17 @@
 
 #include "minishell.h"
 
-void	ft_control_token(t_minishell *mini)
+int	ft_control_token(t_minishell *mini)
 {
 	int			i;
 	char		*str;
 	t_list		*tmp;
 
+	if (check_for_q(mini))
+	{
+		print_error(NULL, "error: unifinished quotes\n", 2);
+		return (1);
+	}
 	tmp = mini->nodes_t;
 	while (tmp != NULL)
 	{
@@ -31,6 +36,7 @@ void	ft_control_token(t_minishell *mini)
 		}
 		tmp = tmp->next;
 	}
+	return (0);
 }
 
 int	parse_init(char *input)
@@ -43,16 +49,17 @@ int	parse_init(char *input)
 	mini->nodes_t->next = NULL;
 	input = ft_tab_to_space(input);
 	input = ft_strtrim(input, " ");
-	str = ft_split(input, ' ');
+	str = ft_split_adjusted(input, ' ');
 	mini = ft_tokanazition(str, mini);
 	ft_split_free(str);
 	mini = ft_assign_special_type(mini);
-	ft_control_token(mini);
+	if (ft_control_token(mini))
+		return (1);
 	if (ft_syntax_check(mini))
 		return (1);
 	mini->token_num = ft_lstprint_t(mini);
 	mini = parse(0, 1, mini);
-	ft_execution(mini);
+//	ft_execution(mini);
 	return (0);
 }
 
@@ -82,87 +89,3 @@ t_minishell	*ft_tokanazition(char **str, t_minishell *mini)
 	mini = ft_deleteFirstNode(mini);
 	return (mini);
 }
-
-
-
-/*int	ft_getsize(t_minishell *mini)
-{
-	int	size;
-	t_list *tmp;
-	char	*str;
-
-	tmp = mini->nodes_t;
-	size = 1;
-	while (tmp->next != NULL)
-	{
-		str = (char *)tmp->content;
-		if (ft_special_type(str))
-			size++;
-		tmp = tmp->next;
-	}
-	return (size);
-}
-
-char	*ft_split_with_redirect(t_list *mini, t_list **head)
-{
-	int		i;
-	char	*str;
-	t_list	*tmp;
-	int		len;
-	char	*str_tmp;
-	int j;
-
-	j = 0;
-	len = 0;
-	tmp = *head;
-	while (tmp != NULL && !(ft_special_type((char *)tmp->content)))
-	{
-		len += ft_strlen((char *)tmp->content);
-		tmp = tmp->next;
-	}
-	str = malloc(sizeof(char) * (len + 1));
-	if (!str)
-		return (NULL);
-	i = 0;
-	tmp = *head;
-	while (tmp != NULL && !(ft_special_type((char *)tmp->content)))
-	{
-		str_tmp = (char *)tmp->content;
-		i = 0;
-		while (str_tmp[i])
-			str[j++] = str_tmp[i++];
-		tmp = tmp->next;
-	}
-	if (tmp == NULL)
-		(*head) = mini;
-	else if ((ft_special_type((char *)tmp->content)))
-		(*head) = mini->next;
-	str[len] = '\0';
-	return (str);
-}
-
-void	ft_spread(t_minishell *mini)
-{
-	t_list	*tmp;
-	t_list	*tmp_1;
-	char	*str;
-	int		i;
-
-
-	mini->full_cmd = malloc(sizeof(char *) * (mini->size + 1));
-	i = 0;
-	tmp = mini->nodes_t;
-	tmp_1 = mini->nodes_t;
-	while (tmp != NULL)
-	{
-		str = (char *)tmp->content;
-		if (ft_special_type(str) || tmp->next == NULL)
-		{
-			mini->full_cmd[i] = ft_split_with_redirect(tmp, &tmp_1);
-			printf("%s\n", mini->full_cmd[i]);
-			i++;
-		}
-		tmp = tmp->next;
-	}
-	mini->full_cmd[i] = NULL;
-}*/

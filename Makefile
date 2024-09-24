@@ -11,9 +11,10 @@ SRC = 	./parsing/tokenization.c \
 		./parsing/syntax_controll.c \
 		./parsing/ft_expand_envp.c \
 		./utils/single_quotes.c \
-		./utils/util.c \
+		./utils/util_1.c \
 		./utils/util_2.c \
 		./utils/util_3.c \
+		./utils/util_5.c \
 		./utils/double_quotes.c \
 		./utils/ft_minishell_init.c \
 		./utils/ft_exit_bits.c \
@@ -32,6 +33,7 @@ SRC = 	./parsing/tokenization.c \
 		./execution/ft_pipe.c \
 		./init.c \
 		./main.c
+#		./utils/util_4.c #
 
 OBJS = $(SRC:.c=.o)
 
