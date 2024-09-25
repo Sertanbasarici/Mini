@@ -6,24 +6,24 @@
 /*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 22:06:14 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/24 19:31:40 by murathanelc      ###   ########.fr       */
+/*   Updated: 2024/09/25 13:22:36 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // check for node. if there is node go to next node. If there isn't a node but there is a command execute command
-void	ft_check_next_node(t_minishell *mini, t_parse *temp, t_file **file)
+void	ft_check_next_node(t_parse *parse, t_file **file)
 {
 	if ((*file)->next != NULL) // if there is a next file
 	{
-		(*file) = (*file)->next; // go to next file
+		*file = (*file)->next; // go to next file
 		return ;
 	}
-	else if (temp->args[0]) // if it is an command
+	else if (parse->args[0]) // if it is an command
 	{
 		(*file) = (*file)->next;
-		ft_execve_or_builtin(mini);
+		ft_execve_or_builtin(parse->args);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 22:31:01 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/24 19:28:06 by murathanelc      ###   ########.fr       */
+/*   Updated: 2024/09/25 00:45:53 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_process_heredoc_data(char **envp, char *str, int pipe_fd, t_file **file)
 }
 
 // manage parent process for heredoc. !!! pipe_fd[0] refers to reading side of path, pipe_fd[1] is the writing side of pipe
-void	ft_heredoc_parent_process(t_minishell *mini, int pipe_fd[2], t_parse *parse, t_file **file, t_fd **fd)
+void	ft_heredoc_parent_process(int pipe_fd[2], t_parse *parse, t_file **file, t_fd **fd)
 {
 	close(pipe_fd[1]);
 	// ignore any signals
@@ -65,14 +65,14 @@ void	ft_heredoc_parent_process(t_minishell *mini, int pipe_fd[2], t_parse *parse
 	{
 		*file = (*file)->next;
 		if (parse->args[0] != NULL)
-			ft_execve_or_builtin(mini);
+			ft_execve_or_builtin(parse->args);
 	}
 	// signal (SIGQUIT)
 	// signal (SIGINT)
 }
 
 // heredoc
-void	ft_heredoc(t_minishell *mini,t_parse *parse, t_file **file, t_fd **fd)
+void	ft_heredoc(t_parse *parse, t_file **file, t_fd **fd)
 {
 	int		p_fd[2];
 	int		pid;
@@ -93,5 +93,5 @@ void	ft_heredoc(t_minishell *mini,t_parse *parse, t_file **file, t_fd **fd)
 		exit(1);
 	}
 	else
-		ft_heredoc_parent_process(mini, p_fd, parse, file, fd);
+		ft_heredoc_parent_process(p_fd, parse, file, fd);
 }

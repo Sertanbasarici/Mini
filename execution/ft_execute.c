@@ -6,7 +6,7 @@
 /*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 23:20:49 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/24 20:30:45 by murathanelc      ###   ########.fr       */
+/*   Updated: 2024/09/25 13:29:05 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,48 +70,48 @@ char	*ft_find_command_path(char *command)
 	return (NULL);
 }
 
-void	ft_execute_execve(t_minishell *mini)
-{
-	char	**argv;
-	char	*command_path;
-	char	*str;
-	int		argc;
-	int		i;
-	t_list	*temp;
+// void	ft_execute_execve(char *str)
+// {
+// 	char	**argv;
+// 	char	*command_path;
+// 	char	*str;
+// 	int		argc;
+// 	int		i;
+// 	t_list	*temp;
 	
-	temp = mini->nodes_t;
-	str = (char *)temp->content;
-	if (mini == NULL || str == NULL)
-		return ;
-	command_path = ft_find_command_path(str);
-	if (command_path == NULL)
-	{
-		printf("%s: command not found\n", str);
-		return ;
-	}
-	argc = 0;
-	while (temp)
-	{
-		argc++;
-		temp = temp->next;
-	}
-	argv = malloc((argc + 1) *  sizeof(char *));
-	i = 0;
-	temp = mini->nodes_t;
-	while (i < argc && temp != NULL)
-	{
-		argv[i] = (char *)temp->content;
-		temp = temp->next;
-		i++;
-	}
-	argv[argc] = NULL; // last char shoudl be null
-	if (execve(command_path, argv, NULL) == -1)
-	{
-		perror("execve failed");
-		exit(EXIT_FAILURE);
-	}
-	free(argv);
-}
+// 	temp = mini->nodes_t;
+// 	str = (char *)temp->content;
+// 	if (mini == NULL || str == NULL)
+// 		return ;
+// 	command_path = ft_find_command_path(str);
+// 	if (command_path == NULL)
+// 	{
+// 		printf("%s: command not found\n", str);
+// 		return ;
+// 	}
+// 	argc = 0;
+// 	while (temp)
+// 	{
+// 		argc++;
+// 		temp = temp->next;
+// 	}
+// 	argv = malloc((argc + 1) *  sizeof(char *));
+// 	i = 0;
+// 	temp = mini->nodes_t;
+// 	while (i < argc && temp != NULL)
+// 	{
+// 		argv[i] = (char *)temp->content;
+// 		temp = temp->next;
+// 		i++;
+// 	}
+// 	argv[argc] = NULL; // last char shoudl be null
+// 	if (execve(command_path, argv, NULL) == -1)
+// 	{
+// 		perror("execve failed");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	free(argv);
+// }
 
 // void	ft_builtin_commands(t_minishell *mini)
 // {
@@ -134,41 +134,39 @@ void	ft_execute_execve(t_minishell *mini)
 // 		ft_exit(input);
 // }
 
-void	ft_execute_commands(t_minishell *mini, int flag)
+void	ft_execute_commands(t_parse *parse, t_file *file, t_fd **fd, int flag)
 {
-	if (mini->file == NULL)
+	if (file == NULL)
 	{
-		ft_execve_or_builtin(mini);
+		ft_execve_or_builtin(parse->args);
 		if (flag == 0)
-			ft_return_fd(mini);
+			ft_return_fd();
 		else
-			dup2(mini->nodes_p->in_file, STDIN_FILENO);
+			dup2(parse->in_file, STDIN_FILENO);
 		return ;
 	}
-	while (mini->file != NULL)
+	while (file != NULL)
 	{
-		if (mini->file->type == GREATER)
+		if (file->type == GREATER)
 			; // redirect in
-		else if (mini->file->type == SMALLER)
+		else if (file->type == SMALLER)
 			; // redirect out
-		else if (mini->file->type == APPEND)
+		else if (file->type == APPEND)
 			; // append
-		else if (mini->file->type == HERE_DOC)
-			ft_heredoc(mini, mini->nodes_p, &mini->file, &mini->fd);
-		if (mini->file == NULL && mini->nodes_p->next == NULL)
-			ft_return_fd(mini);
+		else if (file->type == HERE_DOC)
+			ft_heredoc(parse, &file, fd);
+		if (file == NULL && parse->next == NULL)
+			ft_return_fd();
 	}
 }
 
-void	ft_execve_or_builtin(t_minishell *mini)
+void	ft_execve_or_builtin(char **str)
 {
 	pid_t	pid;
 	int		type;
-	char	**str;
 
-	type = ft_builtin_or_not(mini->nodes_p->args[0]);
-	str = mini->nodes_p->args;
-	if (mini->token_num == 1 && type != 0)
+	type = ft_builtin_or_not(str[0]);
+	if (g_minishell.token_num == 1 && type != 0)
 	{
 		ft_execute_builtins(str);
 		return ;
@@ -177,58 +175,62 @@ void	ft_execve_or_builtin(t_minishell *mini)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (type != 0)
-		{
-			ft_execute_builtins(str);
-			exit(0);
-		}
-		else
-			ft_execute_execve(mini);
+		ft_execute_builtins(str);
+		exit(0);
 	}
 	return ;
 }
 
-void	ft_command(t_minishell *mini)
+void	ft_command(t_parse **parse, t_fd **fd)
 {
-	// int	type; // sinyal kısmıyla alakalı
-	int	flag;
+	int		type; // sinyal kısmıyla alakalı
+	int		flag;
 
-	// type = ft_builtin_or_not(mini->nodes_p->args[0]); bu kısımda sinyallerle ilgili //
+	type = ft_builtin_or_not(parse[0]->args[0]); // bu kısımda sinyallerle ilgili //
 	flag = 0;
-	if (mini->nodes_p->next != NULL)
+	if (parse[1] != NULL)
 	{
 		flag = 1;
-		ft_handle_pipe(mini, flag);
+		ft_handle_pipe(parse, fd, flag);
 	}
 	else
-		ft_execute_commands(mini, flag);
+		ft_execute_commands(parse[0], parse[0]->file, fd, flag);
 	// handle signals later //
+	while (waitpid(0, &g_minishell.exit_status, 0) > 0)
+		continue;
+	if (type == 0)
+	{
+		if (ft_is_exited(g_minishell.exit_status))
+			g_minishell.exit_status = ft_get_exit_status(g_minishell.exit_status);
+		else
+			g_minishell.exit_status = 130;
+	}
+	signal(SIGQUIT, SIG_IGN);
 }
 
-void	ft_dup_fd(t_minishell *mini, t_parse *parse)
+void	ft_dup_fd(t_parse *parse)
 {
 	if (parse->args[0])
 	{
-		parse->in_file = dup(mini->fd->in);
-		parse->out_file = dup(mini->fd->out);
+		parse->in_file = dup(g_minishell.in);
+		parse->out_file = dup(g_minishell.in);
 	}
-	mini->fd->in = dup(STDIN_FILENO);
-	mini->fd->out = dup(STDOUT_FILENO);
+	g_minishell.in = dup(STDIN_FILENO);
+	g_minishell.in2 = dup(STDIN_FILENO);
+	g_minishell.out = dup(STDOUT_FILENO);
+	g_minishell.out2 = dup(STDOUT_FILENO);
 }
 
 void	ft_execution(t_minishell *mini)
 {
-	t_parse	*parse;
+	t_parse	**parse;
+	t_fd	*fd;
 	char	*str;
 
-	parse = mini->nodes_p;
+	parse = &mini->nodes_p;
 	str = (char *)mini->nodes_t->content;
 	if (mini->nodes_t == NULL || str == NULL)
 		return ;
-	ft_dup_fd(mini, parse);
-	// if (ft_strncmp(str, "ls", ft_strlen(str)) == 0)
-	// 	ft_execute_commands(mini);
-	// else
-	// 	ft_builtin_commands(mini);
-	ft_command(mini);
+	ft_dup_fd(parse[0]);
+	ft_command(parse, &fd);
 }

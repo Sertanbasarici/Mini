@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 15:46:22 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/24 12:47:45 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/25 00:25:00 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ t_minishell	*create_out_dup_list(t_minishell *mini)
 	t_file		*file;
 
 	fd = (t_fd *)malloc(sizeof(t_fd));
-	mini->fd = fd;
+	g_minishell.fd = fd;
 	temp = mini->nodes_p;
 	while (temp != NULL)
 	{

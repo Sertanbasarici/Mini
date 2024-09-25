@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:07:13 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/25 00:22:46 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/25 13:22:24 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
-#include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -55,6 +54,10 @@ typedef struct	s_minishell
 	t_fd		*fd;
 	t_file		*file;
 	int			token_num;
+	int			in;
+	int			in2;
+	int			out;
+	int			out2;
 	char		**envp;
 	char		*str;
 	int			exit_status;
@@ -62,8 +65,7 @@ typedef struct	s_minishell
 }				t_minishell;
 
 int				check_if_empty(char *str);
-void			ctr_c(int num);
-void			ctrl_d(char *input);
+
 // initialize
 void			adjsut_all(char *input);
 
@@ -164,38 +166,37 @@ int				pipe_check(t_list *tmp_token, t_list *tmp_prev);
 
 char			**ft_get_char(t_minishell *token);
 char			*ft_find_command_path(char *command);
-void			ft_execute_execve(t_minishell *mini);
-void			ft_execute_commands(t_minishell *mini, int flag);
-void			ft_execve_or_builtin(t_minishell *mini);
-void			ft_command(t_minishell *mini);
-void			ft_dup_fd(t_minishell *mini, t_parse *parse);
-void			ft_command(t_minishell *mini);
+// void			ft_execute_execve(t_minishell *mini);
+void			ft_execute_commands(t_parse *parse, t_file *file, t_fd **fd, int flag);
+void			ft_execve_or_builtin(char **str);
+void			ft_dup_fd(t_parse *parse);
+void			ft_command(t_parse **parse, t_fd **fd);
 int				ft_builtin_or_not(char *str);
 void			ft_execute_builtins(char **commands);
 void			ft_execution(t_minishell *mini);
-void			ft_execve_or_builtin(t_minishell *mini);
+void			ft_execve_or_builtin(char **str);
 
 //------heredoc------//
 void			ft_write_heredoc(char *str, int pipe_fd);
 void			ft_process_heredoc_data(char **envp, char *str, int pipe_fd, t_file **file);
-void			ft_heredoc_parent_process(t_minishell *mini, int pipe_fd[2], t_parse *parse, t_file **file, t_fd **fd);
-void			ft_heredoc(t_minishell *mini,t_parse *parse, t_file **file, t_fd **fd);
+void			ft_heredoc_parent_process(int pipe_fd[2], t_parse *parse, t_file **file, t_fd **fd);
+void			ft_heredoc(t_parse *parse, t_file **file, t_fd **fd);
 
 //------heredoc utils------//
 
-void			ft_check_next_node(t_minishell *mini, t_parse *temp, t_file **file);
+void			ft_check_next_node(t_parse *parse, t_file **file);
 char			*ft_convert_char_to_string(char c);
 char			*ft_add_char_to_string(char *str, char c);
 char			*ft_search_and_expand_env(char **env, char *str);
 
 // pipe
 
-void			ft_return_fd(t_minishell *mini);
+void			ft_return_fd(void);
 void			ft_free_open_pipes(int **fd_pipe);
-int				**ft_open_pipe(t_minishell *mini);
-void			ft_write_pipe(t_minishell *mini, t_parse *parse, int **fd_pipe, int i, int flag);
-void			ft_connect_pipes(t_minishell *mini, t_parse *parse, int **fd_pipe, int i);
-void			ft_handle_pipe(t_minishell *mini, int flag);
+int				**ft_open_pipe(void);
+void			ft_write_pipe(t_parse **parse, int **fd_pipe, int i, t_fd **fd, int flag);
+void			ft_connect_pipes(t_parse **parse, int **fd_pipe, int i);
+void			ft_handle_pipe(t_parse **parse, t_fd **fd, int flag);
 
 //	commands
 

@@ -6,18 +6,18 @@
 /*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 13:35:38 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/24 20:39:30 by murathanelc      ###   ########.fr       */
+/*   Updated: 2024/09/25 13:24:02 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_return_fd(t_minishell *mini)
+void	ft_return_fd(void)
 {
-	dup2(mini->fd->out, STDOUT_FILENO);
-	close(mini->fd->out);
-	dup2(mini->fd->in, STDIN_FILENO);
-	close(mini->fd->in);
+	dup2(g_minishell.out2, STDOUT_FILENO);
+	close(g_minishell.out2);
+	dup2(g_minishell.in2, STDIN_FILENO);
+	close(g_minishell.in2);
 }
 
 // free open pipes
@@ -34,13 +34,13 @@ void	ft_free_open_pipes(int **fd_pipe)
 	free(fd_pipe);
 }
 
-int	**ft_open_pipe(t_minishell *mini)
+int	**ft_open_pipe()
 {
 	int	**pipe_fd;
 	int	i;
 	int	j;
 
-	i = mini->token_num - 1; // öylesine
+	i = g_minishell.token_num - 1; // öylesine
 	pipe_fd = malloc((i + 1) * sizeof(int *));
 	if (pipe_fd != NULL)
 		ft_memset(pipe_fd, 0, (i + 1) * sizeof(int *));
@@ -54,22 +54,22 @@ int	**ft_open_pipe(t_minishell *mini)
 	return (pipe_fd);
 }
 
-void	ft_write_pipe(t_minishell *mini, t_parse *parse, int **fd_pipe, int i, int flag)
+void	ft_write_pipe(t_parse **parse, int **fd_pipe, int i, t_fd **fd, int flag)
 {
-	if (parse->next == NULL)
+	if (parse[i + 1] == NULL)
 	{
-		dup2(mini->fd->out, STDOUT_FILENO);
-		parse->out_file = mini->nodes_p->out_file;
-		ft_execute_commands(mini, flag);
-		close(mini->fd->out);
+		dup2(g_minishell.out, STDOUT_FILENO);
+		parse[i]->out_file = g_minishell.out;
+		ft_execute_commands(parse[i], parse[i]->file, fd, flag);
+		close(g_minishell.out);
 		close(fd_pipe[i - 1][0]);
 		return ;
 	}
 	else
 	{
 		dup2(fd_pipe[i][1], STDOUT_FILENO);
-		parse[i].out_file = fd_pipe[i][1];
-		ft_execute_commands(mini, flag);
+		parse[i]->out_file = fd_pipe[i][1];
+		ft_execute_commands(parse[i], parse[i]->file, fd, flag);
 		close(fd_pipe[i][1]);
 	}
 	if (i > 0)
@@ -77,34 +77,35 @@ void	ft_write_pipe(t_minishell *mini, t_parse *parse, int **fd_pipe, int i, int 
 }
 
 // connect pipes
-void	ft_connect_pipes(t_minishell *mini, t_parse *parse,int **fd_pipe, int i)
+void	ft_connect_pipes(t_parse **parse, int **fd_pipe, int i)
 {
-	if (mini->nodes_p == NULL)
+	(void)parse;
+	if (parse[i] == NULL)
 	{
-		dup2(mini->fd->in, STDIN_FILENO);
-		close(mini->fd->in);
+		dup2(g_minishell.in, STDIN_FILENO);
+		close(g_minishell.in);
 		return ;
 	}
 	if (i > 0)
 	{
 		dup2(fd_pipe[i - 1][0], STDIN_FILENO);
-		parse[i].in_file = fd_pipe[i - 1][0];
+		parse[i]->in_file = fd_pipe[i - 1][0];
 	}
 }
 
 // handle pipe
-void	ft_handle_pipe(t_minishell *mini, int flag)
+void	ft_handle_pipe(t_parse **parse, t_fd **fd, int flag)
 {
 	int	i;
 	int	**fd_pipe;
 
 	i = 0;
-	fd_pipe = ft_open_pipe(mini);
-	while (mini->nodes_p->args[i])
+	fd_pipe = ft_open_pipe();
+	while (parse[i])
 	{
-		ft_write_pipe(mini, mini->nodes_p, fd_pipe, i, flag);
+		ft_write_pipe(parse, fd_pipe, i, fd, flag);
 		i++;
-		ft_connect_pipes(mini, mini->nodes_p, fd_pipe, i);
+		ft_connect_pipes(parse, fd_pipe, i);
 	}
 	ft_free_open_pipes(fd_pipe);
 }
