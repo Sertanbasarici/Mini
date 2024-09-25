@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 23:20:49 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/25 13:29:05 by murathanelc      ###   ########.fr       */
+/*   Updated: 2024/09/25 14:49:51 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,20 +181,22 @@ void	ft_execve_or_builtin(char **str)
 	return ;
 }
 
-void	ft_command(t_parse **parse, t_fd **fd)
+void	ft_command(t_parse *parse, t_fd **fd)
 {
 	int		type; // sinyal kısmıyla alakalı
 	int		flag;
 
-	type = ft_builtin_or_not(parse[0]->args[0]); // bu kısımda sinyallerle ilgili //
+	type = ft_builtin_or_not(parse->args[0]); // bu kısımda sinyallerle ilgili //
 	flag = 0;
-	if (parse[1] != NULL)
+	printf("%d \n", type);
+	if (parse->next != NULL)
 	{
 		flag = 1;
-		ft_handle_pipe(parse, fd, flag);
+		pause();
+		ft_handle_pipe(&parse, fd, flag);
 	}
 	else
-		ft_execute_commands(parse[0], parse[0]->file, fd, flag);
+		ft_execute_commands(parse, parse->file, fd, flag);
 	// handle signals later //
 	while (waitpid(0, &g_minishell.exit_status, 0) > 0)
 		continue;
@@ -223,14 +225,14 @@ void	ft_dup_fd(t_parse *parse)
 
 void	ft_execution(t_minishell *mini)
 {
-	t_parse	**parse;
+	t_parse	*parse;
 	t_fd	*fd;
 	char	*str;
 
-	parse = &mini->nodes_p;
+	parse = mini->nodes_p;
 	str = (char *)mini->nodes_t->content;
 	if (mini->nodes_t == NULL || str == NULL)
 		return ;
-	ft_dup_fd(parse[0]);
+	ft_dup_fd(parse);
 	ft_command(parse, &fd);
 }

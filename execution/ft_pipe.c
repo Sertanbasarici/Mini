@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 13:35:38 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/25 13:24:02 by murathanelc      ###   ########.fr       */
+/*   Updated: 2024/09/25 14:49:43 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 15:46:22 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/25 00:25:00 by murathanelc      ###   ########.fr       */
+/*   Updated: 2024/09/25 14:17:54 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

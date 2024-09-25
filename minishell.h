@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:07:13 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/25 13:22:24 by murathanelc      ###   ########.fr       */
+/*   Updated: 2024/09/25 14:49:46 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ char			*ft_check_string(char *str, int *i);
 void			ft_search_envp_vars(char **str);
 
 // util
-void			ft_error();
 int				ft_lstprint_t(t_minishell *mini);
 int				ft_get_size_double_point(char **str);
 void			ft_split_free(char **str);
@@ -170,7 +169,7 @@ char			*ft_find_command_path(char *command);
 void			ft_execute_commands(t_parse *parse, t_file *file, t_fd **fd, int flag);
 void			ft_execve_or_builtin(char **str);
 void			ft_dup_fd(t_parse *parse);
-void			ft_command(t_parse **parse, t_fd **fd);
+void			ft_command(t_parse *parse, t_fd **fd);
 int				ft_builtin_or_not(char *str);
 void			ft_execute_builtins(char **commands);
 void			ft_execution(t_minishell *mini);
