@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:07:13 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/25 14:49:46 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/26 14:56:12 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct	s_minishell
 	t_fd		*fd;
 	t_file		*file;
 	int			token_num;
+	int			token_num2;
 	int			in;
 	int			in2;
 	int			out;
@@ -62,6 +63,7 @@ typedef struct	s_minishell
 	char		*str;
 	int			exit_status;
 	int			error;
+	int			pipe_flag;
 }				t_minishell;
 
 int				check_if_empty(char *str);
@@ -71,13 +73,11 @@ void			adjsut_all(char *input);
 
 // adjust quotes
 int				ft_single_quotes_finised(char *input, int index);
-int				ft_quotes_num(char *input);
+int				ft_quotes_num(char *input, char c);
 int				ft_is_quotes_there(char *input);
 int				ft_is_quotes_there_index(char c);
 int				ft_quotes(char *input);
 int				ft_last_index_check(char *str);
-void			ft_dollar_sign(char *str);
-void			ft_back_slash(char *str);
 int				ft_double_quotes_check(char *str, int index);
 int				ft_double_quotes_finised(char *input, int index);
 int				ft_even_odd(char *str, char c);
@@ -85,6 +85,8 @@ t_list			*add_q_to_nodes(int *index, char *input, t_list *mini_list);
 int				ft_find_next_q(int start, char *input);
 t_list			*ft_getridof_q(t_list *nodes_t);
 t_list			*ft_basic_q(t_list *nodes_t, int	len);
+int				ft_dollar_len(char *str);
+char			*ft_dollar_sign(char *str);
 
 // tokenizations
 int				parse_init(char *input);
@@ -129,6 +131,7 @@ int				ft_get_term_signal(int status);
 char			**ft_split_adjusted(char *s, char c);
 int				check_for_q(t_minishell *mini);
 char			*ft_handle_q(char **s);
+int				ft_token_counter(char **str);
 
 //redirect in token
 int				ft_special_type_index(char c);
@@ -144,7 +147,6 @@ t_minishell		*divide_accordingly(char *input, t_minishell *mini, int *index);
 t_minishell		*ft_add_new_node(char *input, int start, int len, t_minishell *mini, int *index_num);
 
 //	syntax controll
-
 int				ft_syntax_check(t_minishell *mini);
 int				fixed_check(t_list *tmp_token);
 int				redic_check(t_list *tmp_token);
@@ -166,7 +168,7 @@ int				pipe_check(t_list *tmp_token, t_list *tmp_prev);
 char			**ft_get_char(t_minishell *token);
 char			*ft_find_command_path(char *command);
 // void			ft_execute_execve(t_minishell *mini);
-void			ft_execute_commands(t_parse *parse, t_file *file, t_fd **fd, int flag);
+void			ft_execute_commands(t_parse *parse, t_file *file, t_fd **fd);
 void			ft_execve_or_builtin(char **str);
 void			ft_dup_fd(t_parse *parse);
 void			ft_command(t_parse *parse, t_fd **fd);
@@ -182,23 +184,27 @@ void			ft_heredoc_parent_process(int pipe_fd[2], t_parse *parse, t_file **file, 
 void			ft_heredoc(t_parse *parse, t_file **file, t_fd **fd);
 
 //------heredoc utils------//
-
 void			ft_check_next_node(t_parse *parse, t_file **file);
 char			*ft_convert_char_to_string(char c);
 char			*ft_add_char_to_string(char *str, char c);
 char			*ft_search_and_expand_env(char **env, char *str);
 
 // pipe
-
 void			ft_return_fd(void);
 void			ft_free_open_pipes(int **fd_pipe);
 int				**ft_open_pipe(void);
-void			ft_write_pipe(t_parse **parse, int **fd_pipe, int i, t_fd **fd, int flag);
+void			ft_write_pipe(t_parse **parse, int **fd_pipe, int i, t_fd **fd);
 void			ft_connect_pipes(t_parse **parse, int **fd_pipe, int i);
-void			ft_handle_pipe(t_parse **parse, t_fd **fd, int flag);
+void			ft_handle_pipe(t_parse **parse, t_fd **fd);
+
+// execve //
+void	ft_execute(char *full_path, char **str);
+char	*ft_search_path(char *str, char *path);
+char	*ft_my_get_env(char **envp, char *str);
+int		ft_check_if_path(char *str);
+void	ft_execute_execve(char **str);
 
 //	commands
-
 void			ft_cd(char **str);
 bool			ft_check_option_n(char *str, int i);
 int				ft_check_option(char *str);

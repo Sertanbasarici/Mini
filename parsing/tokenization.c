@@ -23,6 +23,7 @@ int	ft_control_token(t_minishell *mini)
 		print_error(NULL, "error: unifinished quotes\n", 2);
 		return (1);
 	}
+	pause();
 	tmp = mini->nodes_t;
 	while (tmp != NULL)
 	{
@@ -50,6 +51,7 @@ int	parse_init(char *input)
 	input = ft_tab_to_space(input);
 	input = ft_strtrim(input, " ");
 	str = ft_split_adjusted(input, ' ');
+	g_minishell.token_num2 = ft_token_counter(str);
 	mini = ft_tokanazition(str, mini);
 	ft_split_free(str);
 	mini = ft_assign_special_type(mini);
@@ -59,7 +61,7 @@ int	parse_init(char *input)
 		return (1);
 	g_minishell.token_num = ft_lstprint_t(mini);
 	mini = parse(0, 1, mini);
-	ft_execution(mini);
+//	ft_execution(mini);
 	return (0);
 }
 

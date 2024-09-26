@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 15:46:22 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/25 14:17:54 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/26 14:40:08 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	handle_pipes(t_list **token, t_parse **old_current)
 
 	new_current = init_cmd((*old_current)->in_file, (*old_current)->out_file);
 	(*old_current)->next = new_current;
+	(*old_current) = (*old_current)->next;
 	(*token) = (*token)->next;
 }
 
@@ -89,24 +90,24 @@ t_minishell	*parse(int in_file, int out_file, t_minishell *mini)
 {
 	t_parse	*current;
 	t_list	*token;
+	t_parse	*initial;
+
 
 	token = mini->nodes_t;
+	current = init_cmd(in_file, out_file);
+	initial = current;
 	while (token != NULL)
 	{
-		current = init_cmd(in_file, out_file);
-		while (token != NULL)
-		{
-			if ((token->type >= 1 && token->type<= 4) && token->next)
-				adjust_redirecs(&token, &current);
-			else if(token->type == STRING)
-				add_arguments(&token, &current);
-			else if (token->type == PIPE && token->next)
-				handle_pipes(&token, &current);
-			else
-				token = token->next;
-		}
+		if ((token->type >= 1 && token->type<= 4) && token->next)
+			adjust_redirecs(&token, &current);
+		else if(token->type == STRING)
+			add_arguments(&token, &current);
+		else if (token->type == PIPE && token->next)
+			handle_pipes(&token, &current);
+		else
+			token = token->next;
 	}
-	mini->nodes_p = current;
+	mini->nodes_p = initial;
 	mini = create_out_dup_list(mini);
 	return (mini);
 }
