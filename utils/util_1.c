@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util_1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 15:08:44 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/26 14:49:29 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/26 17:28:47 by melcuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	ft_lstprint_t(t_minishell *mini)
 	tmp = mini->nodes_t;
 	while (tmp != NULL)
 	{
-		printf("%s index:%d type:%d\n", (char *)tmp->content, tmp->index, tmp->type);
+		// printf("%s index:%d type:%d\n", (char *)tmp->content, tmp->index, tmp->type);
 		tmp = tmp->next;
 		i++;
 	}

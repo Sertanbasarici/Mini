@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:07:13 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/26 14:56:12 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/26 18:47:31 by melcuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 typedef struct s_fd
 {
@@ -132,8 +133,10 @@ char			**ft_split_adjusted(char *s, char c);
 int				check_for_q(t_minishell *mini);
 char			*ft_handle_q(char **s);
 int				ft_token_counter(char **str);
+void 			print_char_array(char **array);
 
 //redirect in token
+
 int				ft_special_type_index(char c);
 int				ft_special_type(char *input);
 t_minishell		*ft_find_the_type(char *input, int start,int len, t_minishell *special,int *index_num);
@@ -165,8 +168,7 @@ int				pipe_check(t_list *tmp_token, t_list *tmp_prev);
 // void		ft_check_which_command_execute(t_parse *parse, t_fd **fd);
 
 
-char			**ft_get_char(t_minishell *token);
-char			*ft_find_command_path(char *command);
+
 // void			ft_execute_execve(t_minishell *mini);
 void			ft_execute_commands(t_parse *parse, t_file *file, t_fd **fd);
 void			ft_execve_or_builtin(char **str);
@@ -193,9 +195,9 @@ char			*ft_search_and_expand_env(char **env, char *str);
 void			ft_return_fd(void);
 void			ft_free_open_pipes(int **fd_pipe);
 int				**ft_open_pipe(void);
-void			ft_write_pipe(t_parse **parse, int **fd_pipe, int i, t_fd **fd);
-void			ft_connect_pipes(t_parse **parse, int **fd_pipe, int i);
-void			ft_handle_pipe(t_parse **parse, t_fd **fd);
+void			ft_write_pipe(t_parse *parse, int **fd_pipe, int i, t_fd **fd);
+void			ft_connect_pipes(t_parse *parse, int **fd_pipe, int i);
+void			ft_handle_pipe(t_parse *parse, t_fd **fd);
 
 // execve //
 void	ft_execute(char *full_path, char **str);
@@ -203,6 +205,11 @@ char	*ft_search_path(char *str, char *path);
 char	*ft_my_get_env(char **envp, char *str);
 int		ft_check_if_path(char *str);
 void	ft_execute_execve(char **str);
+
+// redirection
+void	ft_append(t_parse *parse, t_file **file);
+void	ft_redirect_out(t_parse *parse, t_file **file);
+void	ft_redirect_in(t_parse *parse, t_file **file);
 
 //	commands
 void			ft_cd(char **str);

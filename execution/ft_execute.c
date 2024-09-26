@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 23:20:49 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/26 14:15:16 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/26 18:49:27 by melcuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,16 @@ void	ft_execute_commands(t_parse *parse, t_file *file, t_fd **fd)
 	while (file != NULL)
 	{
 		if (file->type == GREATER)
-			; // redirect in
+			ft_redirect_in(parse, &file);
 		else if (file->type == SMALLER)
-			; // redirect out
+			ft_redirect_out(parse, &file);
 		else if (file->type == APPEND)
-			; // append
+			ft_append(parse, &file);
 		else if (file->type == HERE_DOC)
-			ft_heredoc(parse, &file, fd);
+			{
+				printf("Geldi gene\n");
+				ft_heredoc(parse, &file, fd);
+			}
 		if (file == NULL && parse->next == NULL)
 			ft_return_fd();
 	}
@@ -46,7 +49,6 @@ void	ft_execve_or_builtin(char **str)
 	int		type;
 
 	type = ft_builtin_or_not(str[0]);
-	printf("type: %d\n", type);
 	if (g_minishell.token_num2 == 1 && type != 0)
 	{
 		ft_execute_builtins(str);
@@ -72,17 +74,14 @@ void	ft_command(t_parse *parse, t_fd **fd)
 	int		type; // sinyal kısmıyla alakalı
 
 	type = ft_builtin_or_not(parse->args[0]); // bu kısımda sinyallerle ilgili //
-	printf("%d \n", type);
-	g_minishell.pipe_flag = 1;
+	g_minishell.pipe_flag = 0;
 	if (parse->next != NULL)
 	{
-		pause();
 		g_minishell.pipe_flag = 1;
-		ft_handle_pipe(&parse, fd);
+		ft_handle_pipe(parse, fd);
 	}
 	else
 		ft_execute_commands(parse, parse->file, fd);
-	// handle signals later //
 	while (waitpid(0, &g_minishell.exit_status, 0) > 0)
 		continue;
 	if (type == 0)
