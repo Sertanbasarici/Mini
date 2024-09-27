@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:07:13 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/27 18:08:59 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/27 19:45:39 by melcuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct	s_minishell
 	int			pipe_flag;
 	int			flag2;
 	char		*old_pwd;
+	char		**paths;
 }				t_minishell;
 
 int				check_if_empty(char *str);
@@ -138,6 +139,7 @@ int				ft_token_counter(char **str);
 void 			print_char_array(char **array);
 char			*ft_custom_getenv(char *name);
 char			*ft_str_join2(char *str);
+void			ft_update_path_dir(void);
 
 // signals
 void	ft_ignore_signals(void);

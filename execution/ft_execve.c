@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 18:22:46 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/27 18:11:27 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/27 21:47:47 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ extern t_minishell	g_minishell;
 
 void	ft_execute(char *full_path, char **str)
 {
-	printf("gecti \n");
 	if (g_minishell.flag2 == 0)
 	{
 		execve(full_path, str, g_minishell.envp);
