@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:07:13 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/27 14:06:19 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/27 18:08:59 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 #include <stdbool.h>
 #include <sys/wait.h>
 #include <fcntl.h>
-#include <signal.h>
 
 typedef struct s_fd
 {
@@ -54,6 +53,7 @@ typedef struct	s_minishell
 	t_list		*nodes_t;
 	t_parse		*nodes_p;
 	t_fd		*fd;
+	t_file		*file;
 	int			token_num;
 	int			token_num2;
 	int			in;
@@ -65,6 +65,8 @@ typedef struct	s_minishell
 	int			exit_status;
 	int			error;
 	int			pipe_flag;
+	int			flag2;
+	char		*old_pwd;
 }				t_minishell;
 
 int				check_if_empty(char *str);
@@ -134,7 +136,16 @@ int				check_for_q(t_minishell *mini);
 char			*ft_handle_q(char **s);
 int				ft_token_counter(char **str);
 void 			print_char_array(char **array);
-void			ctrl_c(int num);
+char			*ft_custom_getenv(char *name);
+char			*ft_str_join2(char *str);
+
+// signals
+void	ft_ignore_signals(void);
+void	ft_heredoc_signal_init(int sig);
+void	ft_ctrl_c(int signal);
+void	ft_ctrl_d(char *str);
+void	ft_sigint_handler(int signum);
+
 //redirect in token
 
 int				ft_special_type_index(char c);
@@ -207,16 +218,10 @@ int		ft_check_if_path(char *str);
 void	ft_execute_execve(char **str);
 
 // redirection
-void			ft_append(t_parse *parse, t_file **file);
-void			ft_redirect_out(t_parse *parse, t_file **file);
-void			ft_redirect_in(t_parse *parse, t_file **file);
+void	ft_append(t_parse *parse, t_file **file);
+void	ft_redirect_out(t_parse *parse, t_file **file);
+void	ft_redirect_in(t_parse *parse, t_file **file);
 
-//clean
-void			free_all(char *str);
-void			free_file(t_file *file);
-void			free_parse(t_parse *parse);
-void			free_token(t_list *token);
-void			free_fd(t_fd *fd);
 //	commands
 void			ft_cd(char **str);
 bool			ft_check_option_n(char *str, int i);
@@ -226,17 +231,26 @@ void			ft_env(char	**input);
 void			ft_exit(char **str);
 int				ft_check_envp_var(char *str);
 int				ft_check_equal_sign(char *str);
-void			ft_display_env(void);
+void			ft_display_env(char *str);
+void			ft_print_envp();
+void			ft_print_single(char *str);
 int				ft_is_exist(char *str);
 int				ft_number_of_envp_var(void);
 void			ft_free_array(char **str);
 void			ft_add_new_env(char *str);
 void			ft_export(char **input);
-void			ft_pwd(char *str);
+void			ft_pwd(void);
 void			ft_remove_var(char *str);
 void			ft_unset(char **input);
 void			ft_print(char **str, int i, int flag);
 
+//clean//
+void			free_token(t_list *token);
+void			free_file(t_file *file);
+void			free_parse(t_parse *parse);
+void			free_fd(t_fd *fd);
+void			free_all(char *str);
+void			clean_the_mess(void);
 extern t_minishell	g_minishell;
 
 #endif

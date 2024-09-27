@@ -1,6 +1,6 @@
 NAME = minishell
-CC = gcc
-CFLAGS = -Werror -Wextra -Wall -I.
+CC = gcc 
+CFLAGS =  -Werror -Wextra -Wall -I. 
 RM = rm -rf
 
 SRC = 	./parsing/tokenization.c \
@@ -18,6 +18,7 @@ SRC = 	./parsing/tokenization.c \
 		./utils/double_quotes.c \
 		./utils/ft_minishell_init.c \
 		./utils/ft_exit_bits.c \
+		./utils/ft_signals.c \
 		./utils/free_all.c \
 		./commands/ft_cd.c \
 		./commands/ft_echo.c \
@@ -34,8 +35,8 @@ SRC = 	./parsing/tokenization.c \
 		./execution/ft_execve.c \
 		./execution/ft_redirection.c \
 		./init.c \
-		./main.c
-#		./utils/util_4.c #
+		./main.c \
+		./utils/util_4.c
 
 OBJS = $(SRC:.c=.o)
 
@@ -43,7 +44,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@$(MAKE) -C ./libft
-	@$(CC) $(CFLAGS) $(OBJS) -lreadline ./libft/libft.a -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -lreadline  ./libft/libft.a -o $(NAME)
 
 clean:
 	@$(MAKE) -C ./libft clean

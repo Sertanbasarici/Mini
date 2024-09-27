@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 15:08:44 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/27 13:54:45 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/27 18:27:32 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	ft_lstprint_t(t_minishell *mini)
 		tmp = tmp->next;
 		i++;
 	}
+
 	return (i);
 }
 

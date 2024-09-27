@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 22:31:01 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/27 11:09:40 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/27 16:53:05 by melcuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,12 @@ void	ft_process_heredoc_data(char **envp, char *str, int pipe_fd, t_file **file)
 			free(str);
 			break ;
 		}
-		printf("%s \n", str);
 		if (ft_strncmp(str, (*file)->after, ft_strlen((*file)->after)) == 0)
 		{
-			printf("naber müdür \n");
 			break ;
 		}
 		str = ft_search_and_expand_env(envp, str);
-		if ((*file)->type == HERE_DOC || (*file)->after == NULL)
+		if ((*file)->type != HERE_DOC || (*file)->next == NULL)
 			ft_write_heredoc(str, pipe_fd);
 		free(str);
 	}
@@ -51,7 +49,7 @@ void	ft_process_heredoc_data(char **envp, char *str, int pipe_fd, t_file **file)
 void	ft_heredoc_parent_process(int pipe_fd[2], t_parse *parse, t_file **file, t_fd **fd)
 {
 	close(pipe_fd[1]);
-	// ignore any signals
+	ft_ignore_signals();
 	while (waitpid(0, &g_minishell.exit_status, 0) > 0)
 		continue ;
 	if (ft_is_exited(g_minishell.exit_status))
@@ -69,10 +67,12 @@ void	ft_heredoc_parent_process(int pipe_fd[2], t_parse *parse, t_file **file, t_
 	{
 		*file = (*file)->next;
 		if (parse->args[0])
+		{
 			ft_execve_or_builtin(parse->args);
+		}
 	}
 	signal(SIGQUIT, SIG_IGN);
-	// signal (SIGINT)
+	signal(SIGINT, &ft_ctrl_c);
 }
 
 // heredoc
@@ -89,13 +89,14 @@ void	ft_heredoc(t_parse *parse, t_file **file, t_fd **fd)
 	envp = g_minishell.envp;
 	pipe(p_fd);
 	pid = fork();
-	// signal(SIGINT, &ft_heredoc_signal);
-	printf("BEN GELDİMMM\n");
+	signal(SIGINT, &ft_heredoc_signal_init);
 	if (pid == 0)
 	{
 		close(p_fd[0]);
 		ft_process_heredoc_data(envp, str, p_fd[1], file);
 		close(p_fd[1]);
+		free_all(g_minishell.str);
+		clean_the_mess();
 		exit(0);
 	}
 	else

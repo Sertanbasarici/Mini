@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_all.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/27 10:47:31 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/27 13:58:19 by sebasari         ###   ########.fr       */
+/*   Created: 2024/09/27 16:00:52 by melcuman          #+#    #+#             */
+/*   Updated: 2024/09/27 16:51:55 by melcuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	free_token(t_list *token)
 		tmp = token;
 		printf("gecti token \n");
 	}
+	free(tmp);
 }
 
 void	free_file(t_file *file)
@@ -52,6 +53,7 @@ void	free_parse(t_parse *parse)
 		parse = parse->next;
 		tmp = parse;
 	}
+	free(tmp);
 }
 
 void	free_fd(t_fd *fd)
@@ -61,11 +63,29 @@ void	free_fd(t_fd *fd)
 	tmp = fd;
 	while (tmp != NULL)
 	{
-		free(tmp);
+		// free(tmp);
 		fd = fd->next;
 		tmp = fd;
 		printf("gecti fd\n");
 	}
+}
+
+// clean all the stuff
+void	clean_the_mess(void)
+{
+	int	i;
+
+	i = 0;
+	if (g_minishell.envp)
+	{
+		while (g_minishell.envp[i])
+		{
+			free(g_minishell.envp[i]);
+			i++;
+		}
+		free(g_minishell.envp);
+	}
+	g_minishell.envp = NULL;
 }
 
 void	free_all(char *str)
@@ -85,9 +105,9 @@ void	free_all(char *str)
 		printf("gecti 3\n");
 		free_parse(g_minishell.nodes_p);
 	}
-	if (g_minishell.fd)
+	/*if (g_minishell.fd)
 	{
 		printf("gecti 4\n");
 		free_fd(g_minishell.fd);
-	}
+	}*/
 }
