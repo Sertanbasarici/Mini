@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 12:27:07 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/25 00:03:12 by murathanelc      ###   ########.fr       */
+/*   Updated: 2024/09/27 15:17:16 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,14 @@ int main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	ft_init(envp);
+	signal(SIGINT, ctrl_c);
 	while (1) 
 	{
 		input = readline("minishell$ ");
 		if (check_if_empty(input) == 1)
 			continue ;
 		adjsut_all(input);
-		add_history(input);
+		free_all(input);
 	}
 	return 0;
 }

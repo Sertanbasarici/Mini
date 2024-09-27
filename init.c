@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:58:15 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/23 15:06:31 by melcuman         ###   ########.fr       */
+/*   Updated: 2024/09/27 10:44:41 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 
 void	adjsut_all(char *input)
 {
+	add_history(input);
 	parse_init(input);
 }

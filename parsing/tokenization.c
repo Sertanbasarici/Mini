@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern t_minishell	g_minishell;
+
 int	ft_control_token(t_minishell *mini)
 {
 	int			i;
@@ -51,15 +53,17 @@ int	parse_init(char *input)
 	input = ft_strtrim(input, " ");
 	str = ft_split_adjusted(input, ' ');
 	g_minishell.token_num2 = ft_token_counter(str);
-	mini = ft_tokanazition(str, mini);
+	mini = ft_tokanazition(str, mini); // leak check
 	ft_split_free(str);
 	mini = ft_assign_special_type(mini);
-	if (ft_control_token(mini))
+	if (ft_control_token(mini)) 
 		return (1);
 	if (ft_syntax_check(mini))
 		return (1);
 	g_minishell.token_num = ft_lstprint_t(mini);
-	mini = parse(0, 1, mini);
+	mini = parse(0, 1, mini); // leak check
+	g_minishell.nodes_t = mini->nodes_t;
+	g_minishell.nodes_p = mini->nodes_p;
 	ft_execution(mini);
 	return (0);
 }

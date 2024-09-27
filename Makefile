@@ -18,6 +18,7 @@ SRC = 	./parsing/tokenization.c \
 		./utils/double_quotes.c \
 		./utils/ft_minishell_init.c \
 		./utils/ft_exit_bits.c \
+		./utils/free_all.c \
 		./commands/ft_cd.c \
 		./commands/ft_echo.c \
 		./commands/ft_env.c \

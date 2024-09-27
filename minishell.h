@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:07:13 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/26 18:47:31 by melcuman         ###   ########.fr       */
+/*   Updated: 2024/09/27 14:06:19 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <stdbool.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <signal.h>
 
 typedef struct s_fd
 {
@@ -53,7 +54,6 @@ typedef struct	s_minishell
 	t_list		*nodes_t;
 	t_parse		*nodes_p;
 	t_fd		*fd;
-	t_file		*file;
 	int			token_num;
 	int			token_num2;
 	int			in;
@@ -134,7 +134,7 @@ int				check_for_q(t_minishell *mini);
 char			*ft_handle_q(char **s);
 int				ft_token_counter(char **str);
 void 			print_char_array(char **array);
-
+void			ctrl_c(int num);
 //redirect in token
 
 int				ft_special_type_index(char c);
@@ -207,10 +207,16 @@ int		ft_check_if_path(char *str);
 void	ft_execute_execve(char **str);
 
 // redirection
-void	ft_append(t_parse *parse, t_file **file);
-void	ft_redirect_out(t_parse *parse, t_file **file);
-void	ft_redirect_in(t_parse *parse, t_file **file);
+void			ft_append(t_parse *parse, t_file **file);
+void			ft_redirect_out(t_parse *parse, t_file **file);
+void			ft_redirect_in(t_parse *parse, t_file **file);
 
+//clean
+void			free_all(char *str);
+void			free_file(t_file *file);
+void			free_parse(t_parse *parse);
+void			free_token(t_list *token);
+void			free_fd(t_fd *fd);
 //	commands
 void			ft_cd(char **str);
 bool			ft_check_option_n(char *str, int i);

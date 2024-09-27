@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 22:31:01 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/26 19:13:23 by melcuman         ###   ########.fr       */
+/*   Updated: 2024/09/27 11:09:40 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,7 @@ void	ft_heredoc_parent_process(int pipe_fd[2], t_parse *parse, t_file **file, t_
 	{
 		*file = (*file)->next;
 		if (parse->args[0])
-		{
-			printf("cATTTT");
 			ft_execve_or_builtin(parse->args);
-		}
 	}
 	signal(SIGQUIT, SIG_IGN);
 	// signal (SIGINT)
