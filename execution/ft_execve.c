@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execve.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/25 18:22:46 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/28 15:46:27 by murathanelc      ###   ########.fr       */
+/*   Created: 2024/09/29 17:57:31 by melcuman          #+#    #+#             */
+/*   Updated: 2024/09/29 20:35:26 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,43 +32,13 @@ void	ft_execute(char *full_path, char **str)
 	}
 }
 
-char	*ft_str_join2(char *str)
-{
-	char	*str_new;
-	int		i;
-	int		len;
-	int		j;
-
-	len = 0;
-	i = 1;
-	while (str[i])
-	{
-		if (str[i] == '/')
-			break ;
-		i++;
-	}
-	j = i;
-	while (str[i++])
-		len++;
-	i = j;
-	j = 0;
-	str_new= malloc(sizeof(char) * (len + 1));
-	while (str[i])
-		str_new[j++] = str[i++];
-	return (str_new);
-}
-
-// search command path
 char	*ft_search_path(char *str, char *path)
 {
 	char	*full_path;
 	char	*command;
 	char	*tok;
 
-	if (*str != '/')
-		command = ft_strjoin("/", str);
-	else
-		command = ft_str_join2(str);
+	command = find_slash(str);
 	tok = ft_strtok(path, ":");
 	while (tok != NULL)
 	{
@@ -121,7 +91,6 @@ int	ft_check_if_path(char *str)
 	return (0);
 }
 
-// execve handler
 void	ft_execute_execve(char **str)
 {
 	char	*full_path;

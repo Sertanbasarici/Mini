@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util_4.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/21 22:20:12 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/29 08:23:35 by sebasari         ###   ########.fr       */
+/*   Created: 2024/09/29 15:47:46 by melcuman          #+#    #+#             */
+/*   Updated: 2024/09/29 16:08:36 by melcuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 extern t_minishell	g_minishell;
 
-// getenv functions but customized version
 char	*ft_custom_getenv(char *name)
 {
 	char	*new_str;
@@ -28,7 +27,7 @@ char	*ft_custom_getenv(char *name)
 	{
 		if (ft_strncmp(g_minishell.envp[i], new_str, ft_strlen(new_str)) == 0)
 		{
-			while(g_minishell.envp[i][j] != '=')
+			while (g_minishell.envp[i][j] != '=')
 				j++;
 			free(new_str);
 			return (ft_strdup(&g_minishell.envp[i][j + 1]));
@@ -42,6 +41,7 @@ char	*ft_custom_getenv(char *name)
 void	ft_update_path_dir(void)
 {
 	char	*path;
+
 	if (g_minishell.paths)
 		ft_free_array(g_minishell.paths);
 	path = getenv("PATH");
@@ -86,4 +86,11 @@ char	*ft_strjoin_free(char const *s1, char const *s2)
 	str[a] = '\0';
 	free((char *)s1);
 	return (str);
+}
+
+void	ft_modify_string(char **old, char **new)
+{
+	free(*old);
+	*old = ft_strdup(*new);
+	free(*new);
 }

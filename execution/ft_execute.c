@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/19 23:20:49 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/29 08:25:24 by sebasari         ###   ########.fr       */
+/*   Created: 2024/09/29 17:57:22 by melcuman          #+#    #+#             */
+/*   Updated: 2024/09/29 20:43:13 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	ft_execve_or_builtin(char **str)
 		ft_execute_builtins(str);
 		return ;
 	}
-	// signal();
+	signal(SIGINT, ft_sigint_handler);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -67,9 +67,9 @@ void	ft_execve_or_builtin(char **str)
 
 void	ft_command(t_parse *parse, t_fd **fd)
 {
-	int		type; // sinyal kısmıyla alakalı
+	int		type;
 
-	type = ft_builtin_or_not(parse->args[0]); // bu kısımda sinyallerle ilgili //
+	type = ft_builtin_or_not(parse->args[0]);
 	g_minishell.pipe_flag = 0;
 	if (parse->next != NULL)
 	{
@@ -79,15 +79,17 @@ void	ft_command(t_parse *parse, t_fd **fd)
 	else
 		ft_execute_commands(parse, parse->file, fd);
 	while (waitpid(0, &g_minishell.exit_status, 0) > 0)
-		continue;
+		continue ;
 	if (type == 0)
 	{
 		if (ft_is_exited(g_minishell.exit_status))
-			g_minishell.exit_status = ft_get_exit_status(g_minishell.exit_status);
+			g_minishell.exit_status = ft_get_exit_status(
+					g_minishell.exit_status);
 		else
 			g_minishell.exit_status = 130;
 	}
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, ft_ctrl_c);
 }
 
 void	ft_dup_fd(t_parse *parse)

@@ -6,19 +6,19 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 15:08:44 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/29 08:15:51 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/29 20:35:02 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// free split
-void ft_split_free(char **str)
+void	ft_split_free(char **str)
 {
-	int	i = 0;
+	int	i;
 
+	i = 0;
 	if (str == NULL)
-		return;
+		return ;
 	while (str[i])
 	{
 		free(str[i]);
@@ -30,18 +30,16 @@ void ft_split_free(char **str)
 
 int	ft_lstprint_t(t_minishell *mini)
 {
-	t_list *tmp;
+	t_list	*tmp;
 	int		i;
 
 	i = 0;
 	tmp = mini->nodes_t;
 	while (tmp != NULL)
 	{
-		// printf("%s index:%d type:%d\n", (char *)tmp->content, tmp->index, tmp->type);
 		tmp = tmp->next;
 		i++;
 	}
-
 	return (i);
 }
 
@@ -59,9 +57,8 @@ int	ft_get_size_double_point(char **str)
 	}
 	return (size);
 }
-	
-// print error message
-void	print_error(char *arg, char *message, int exit_status)
+
+int	print_error(char *arg, char *message, int exit_status)
 {
 	char	*str;
 
@@ -69,6 +66,7 @@ void	print_error(char *arg, char *message, int exit_status)
 	ft_putstr_fd(str, 2);
 	free(str);
 	g_minishell.exit_status = exit_status;
+	return (1);
 }
 
 int	ft_find_starting_index_of_q(char *str)

@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 15:19:50 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/17 10:45:02 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/29 19:07:37 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,3 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 		tmp->next = new;
 	}
 }
-

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/21 00:07:24 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/29 14:04:38 by sebasari         ###   ########.fr       */
+/*   Created: 2024/09/29 16:31:33 by melcuman          #+#    #+#             */
+/*   Updated: 2024/09/29 19:11:02 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ char	*ft_envp_var(char *envp, int i)
 	return (str);
 }
 
-// check if '?$' is entered
 char	*ft_check_envp_exit_stat(char *str, int *i)
 {
 	if (str[*i] == '?')
@@ -66,7 +65,6 @@ char	*ft_check_envp_exit_stat(char *str, int *i)
 	}
 }
 
-// Handle environment variable
 char	*ft_handle_envp_var(char **envp, char *str, int *i)
 {
 	char	*temp;
@@ -136,17 +134,15 @@ char	**ft_search_envp_vars(char **str)
 		temp = ft_calloc(1, sizeof(char));
 		while (str[i][j])
 		{
-			
 			check_str = ft_check_string(str[i], &j);
-			new_str = ft_strjoin(temp, check_str);
-			free(temp);
+			new_str = ft_strjoin_free(temp, check_str);
 			temp = ft_strdup(new_str);
 			free(check_str);
 			free(new_str);
 		}
 		ft_modify_string(&str[i], &temp);
 		i++;
-		if (ft_strncmp(str[i - 1], "<<", ft_strlen("<<")) == 0 && str[i] != NULL)
+		if (!ft_strncmp(str[i - 1], "<<", ft_strlen("<<")) && str[i] != NULL)
 			i++;
 	}
 	return (str);

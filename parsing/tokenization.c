@@ -19,10 +19,9 @@ char	*double_quotes_dollar(char **env, char *input)
 	char	*var;
 	int		i;
 
-
 	new_str = ft_strdup("");
-	i = 0;
-	while (input[i])
+	i = -1;
+	while (input[++i])
 	{
 		if (input[i] == '$')
 		{
@@ -33,19 +32,17 @@ char	*double_quotes_dollar(char **env, char *input)
 				new_str = ft_strjoin_free(new_str, var);
 				free(var);
 			}
-			continue;
+			continue ;
 		}
 		char_str = ft_char_string(input[i]);
 		new_str = ft_strjoin_free(new_str, char_str);
 		free(char_str);
-		i++;
 	}
 	return (new_str);
 }
 
 int	ft_control_token(t_minishell *mini)
 {
-	int			i;
 	char		*str;
 	t_list		*tmp;
 
@@ -58,25 +55,32 @@ int	ft_control_token(t_minishell *mini)
 	while (tmp != NULL)
 	{
 		str = (char *)tmp->content;
-		i = 0;
-		while (str[i])
-		{
-			if (ft_is_quotes_there_index(str[i]) == 1)
-				tmp = add_q_to_nodes(&i, str, tmp);
-			if (ft_is_quotes_there_index(str[i]) == 2)
-			{
-				
-				str = double_quotes_dollar(g_minishell.envp, str);
-				if (tmp->content != NULL)
-					free(tmp->content);
-				tmp->content = str;
-				tmp = add_q_to_nodes(&i, str, tmp);
-			}
-			i++;
-		}
+		tmp = check_quotes_final(str, tmp);
 		tmp = tmp->next;
 	}
 	return (0);
+}
+
+t_list	*check_quotes_final(char *str, t_list *tmp)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_is_quotes_there_index(str[i]) == 1)
+			tmp = add_q_to_nodes(&i, str, tmp);
+		if (ft_is_quotes_there_index(str[i]) == 2)
+		{
+			str = double_quotes_dollar(g_minishell.envp, str);
+			if (tmp->content != NULL)
+				free(tmp->content);
+			tmp->content = str;
+			tmp = add_q_to_nodes(&i, str, tmp);
+		}
+		i++;
+	}
+	return (tmp);
 }
 
 int	parse_init(char *input)
@@ -95,7 +99,6 @@ int	parse_init(char *input)
 	mini = ft_tokanazition(str, mini);
 	g_minishell.nodes_t = mini->nodes_t;
 	mini = ft_assign_special_type(mini);
-	ft_control_token(mini);
 	if (ft_control_token(mini) || ft_syntax_check(mini))
 		return (1);
 	g_minishell.token_num = ft_lstprint_t(mini);
@@ -109,19 +112,20 @@ int	parse_init(char *input)
 
 t_minishell	*ft_tokanazition(char **str, t_minishell *mini)
 {
-	int	i;
-	int	j;
-	t_list *new;
+	int		i;
+	int		j;
+	t_list	*new;
 
 	j = 0;
 	i = 0;
 	while (str[i])
 	{
+		mini->str2 = str[i];
 		if (ft_special_type(str[i]))
 			mini = divide_accordingly(str[i], mini, &j);
 		else
 		{
-			new	= ft_lstnew(str[i]);
+			new = ft_lstnew(str[i]);
 			ft_lstadd_back(&mini->nodes_t, new);
 			new->index = j;
 			new->content = malloc((ft_strlen(str[i]) + 1) * sizeof(char));
@@ -130,6 +134,6 @@ t_minishell	*ft_tokanazition(char **str, t_minishell *mini)
 		}
 		i++;
 	}
-	mini = ft_deleteFirstNode(mini);
+	mini = ft_delete_first_node(mini);
 	return (mini);
 }

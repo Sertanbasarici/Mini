@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util_5.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 21:04:32 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/26 18:37:59 by melcuman         ###   ########.fr       */
+/*   Updated: 2024/09/29 18:34:30 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,8 @@ char	**ft_split_adjusted(char *s, char c)
 	size_t	i;
 	size_t	len;
 
-	if (!s)
-		return (0);
 	i = 0;
 	ret = malloc(sizeof(char *) * (ft_word_count(s, c) + 1));
-	if (!ret)
-		return (0);
 	while (*s)
 	{
 		if (ft_is_quotes_there_index(*s))
@@ -60,9 +56,8 @@ char	**ft_split_adjusted(char *s, char c)
 			continue ;
 		}
 		len = 0;
-		while (s[len] && s[len] != c) 
+		while (s[len] && s[len] != c)
 			len++;
-
 		if (len != 0)
 			ret[i++] = ft_substr(s, 0, len);
 		s += len;
@@ -71,7 +66,7 @@ char	**ft_split_adjusted(char *s, char c)
 	return (ret);
 }
 
-char *ft_handle_q(char **s)
+char	*ft_handle_q(char **s)
 {
 	int		size;
 	char	*str;
@@ -98,7 +93,32 @@ int	ft_token_counter(char **str)
 		if (strncmp(str[i], "|", ft_strlen(str[i])) == 0)
 			token_num++;
 		i++;
-	}	
+	}
 	return (token_num + 1);
 }
 
+char	*ft_str_join2(char *str)
+{
+	char	*str_new;
+	int		i;
+	int		len;
+	int		j;
+
+	len = 0;
+	i = 1;
+	while (str[i])
+	{
+		if (str[i] == '/')
+			break ;
+		i++;
+	}
+	j = i;
+	while (str[i++])
+		len++;
+	i = j;
+	j = 0;
+	str_new = malloc(sizeof(char) * (len + 1));
+	while (str[i])
+		str_new[j++] = str[i++];
+	return (str_new);
+}

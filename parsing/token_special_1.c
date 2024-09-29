@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   token_special_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 13:27:03 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/26 15:38:31 by melcuman         ###   ########.fr       */
+/*   Updated: 2024/09/29 18:58:52 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_minishell	*ft_get_redi_herodoc(char *input, int start, int len, t_minishell *mini, int *index_num)
+t_minishell	*ft_get_redi_herodoc(char *input, int start,
+	t_minishell *mini, int *index_num)
 {
 	char	*sub_str;
 	t_list	*new;
 
-	sub_str = ft_substr(input, start, len);
+	sub_str = ft_substr(input, start, 2);
 	new = ft_lstnew(sub_str);
 	new->index = *index_num;
 	ft_lstadd_back(&mini->nodes_t, new);
@@ -28,12 +29,13 @@ t_minishell	*ft_get_redi_herodoc(char *input, int start, int len, t_minishell *m
 	return (mini);
 }
 
-t_minishell	*ft_get_redi_append(char *input, int start, int len, t_minishell *mini, int *index_num)
+t_minishell	*ft_get_redi_append(char *input, int start,
+	t_minishell *mini, int *index_num)
 {
 	char	*sub_str;
 	t_list	*new;
 
-	sub_str = ft_substr(input, start, len);
+	sub_str = ft_substr(input, start, 2);
 	new = ft_lstnew(sub_str);
 	new->index = *index_num;
 	ft_lstadd_back(&mini->nodes_t, new);
@@ -65,19 +67,20 @@ t_minishell	*ft_assign_special_type(t_minishell *mini)
 			tmp->type = APPEND;
 		else if (ft_strncmp(str, "<<", 3) == 0)
 			tmp->type = HERE_DOC;
-		else 
+		else
 			tmp->type = STRING;
 		tmp = tmp->next;
 	}
 	return (mini);
 }
 
-t_minishell	*ft_get_redi_out(char *input, int start, int len, t_minishell *mini, int *index_num)
+t_minishell	*ft_get_redi_out(char *input, int start,
+	t_minishell *mini, int *index_num)
 {
 	char	*sub_str;
 	t_list	*new;
 
-	sub_str = ft_substr(input, start, len);
+	sub_str = ft_substr(input, start, 1);
 	new = ft_lstnew(sub_str);
 	new->index = *index_num;
 	ft_lstadd_back(&mini->nodes_t, new);
@@ -88,12 +91,13 @@ t_minishell	*ft_get_redi_out(char *input, int start, int len, t_minishell *mini,
 	return (mini);
 }
 
-t_minishell	*ft_get_pipe(char *input, int start, int len, t_minishell *mini, int *index_num)
+t_minishell	*ft_get_pipe(char *input, int start,
+	t_minishell *mini, int *index_num)
 {
 	char	*sub_str;
 	t_list	*new;
 
-	sub_str = ft_substr(input, start, len);
+	sub_str = ft_substr(input, start, 1);
 	new = ft_lstnew(sub_str);
 	new->index = *index_num;
 	ft_lstadd_back(&mini->nodes_t, new);

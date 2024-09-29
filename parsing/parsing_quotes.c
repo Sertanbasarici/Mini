@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:44:46 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/29 14:59:33 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/29 19:19:41 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,7 @@ t_list	*ft_getridof_q(t_list *nodes_t)
 		i++;
 	}
 	new_str = malloc(sizeof(char) * (ft_strlen(str) - len + 1));
-	i = 0;
-	while (str[i])
-	{
-		if (i == 0 || i == len - 1)
-			i++;
-		else
-			new_str[j++] = str[i++];
-	}
-	new_str[j] = '\0';
+	new_str = check_q_begin_end(str, new_str, len);
 	free(str);
 	nodes_t->content = malloc(sizeof(char) * (ft_strlen(str) - len + 1));
 	ft_strlcpy(nodes_t->content, new_str, ft_strlen(new_str) + 1);
@@ -55,13 +47,15 @@ int	ft_find_next_q(int start, char *input)
 	if (input[start] == '\'')
 	{
 		next_q++;
-		while (input[next_q] != '\'' && input[next_q] != '\n' && input[next_q] != '\0')
+		while (input[next_q] != '\'' && input[next_q] != '\n'
+			&& input[next_q] != '\0')
 			next_q++;
 	}
 	else if (input[start] == '\"')
 	{
 		next_q++;
-		while (input[next_q] != '\"' && input[next_q] != '\n' && input[next_q] != '\0')
+		while (input[next_q] != '\"' && input[next_q] != '\n'
+			&& input[next_q] != '\0')
 			next_q++;
 	}
 	return (next_q);
@@ -82,7 +76,7 @@ t_list	*ft_basic_q(t_list *nodes_t, int len)
 	{
 		if (i == 0 || i == len)
 			i++;
-		else 
+		else
 			new_str[j++] = str[i++];
 	}
 	new_str[j] = '\0';
@@ -113,7 +107,6 @@ t_list	*add_q_to_nodes(int *index, char *input, t_list *mini_list)
 
 int	ft_is_quotes_there_index(char c)
 {
-	
 	if (c == '\0')
 		return (0);
 	if (c == '\'')
