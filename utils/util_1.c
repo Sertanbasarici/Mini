@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 15:08:44 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/27 18:27:32 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/29 08:15:51 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,9 @@ void	print_error(char *arg, char *message, int exit_status)
 	char	*str;
 
 	str = ft_strjoin(arg, message);
-	ft_putstr_fd(str, exit_status);
+	ft_putstr_fd(str, 2);
 	free(str);
+	g_minishell.exit_status = exit_status;
 }
 
 int	ft_find_starting_index_of_q(char *str)

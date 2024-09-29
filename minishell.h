@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:07:13 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/27 19:45:39 by melcuman         ###   ########.fr       */
+/*   Updated: 2024/09/29 08:24:09 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <stdbool.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <signal.h>
 
 typedef struct s_fd
 {
@@ -68,6 +69,7 @@ typedef struct	s_minishell
 	int			flag2;
 	char		*old_pwd;
 	char		**paths;
+	char		**input;
 }				t_minishell;
 
 int				check_if_empty(char *str);
@@ -96,7 +98,7 @@ char			*ft_dollar_sign(char *str);
 int				parse_init(char *input);
 t_minishell		*ft_tokanazition(char **str, t_minishell *mini);
 int				ft_control_token(t_minishell *mini);
-
+char			*double_quotes_dollar(char **env, char *input);
 //parsing
 t_minishell		*parse(int in_file, int out_file, t_minishell *mini);
 t_parse			*init_cmd(int in_file, int out_file);
@@ -111,7 +113,7 @@ char			*ft_envp_var(char *envp, int i);
 char			*ft_check_envp_exit_stat(char *str, int *i);
 char			*ft_handle_envp_var(char **envp, char *str, int *i);
 char			*ft_check_string(char *str, int *i);
-void			ft_search_envp_vars(char **str);
+char			**ft_search_envp_vars(char **str);
 
 // util
 int				ft_lstprint_t(t_minishell *mini);
@@ -140,6 +142,8 @@ void 			print_char_array(char **array);
 char			*ft_custom_getenv(char *name);
 char			*ft_str_join2(char *str);
 void			ft_update_path_dir(void);
+char			*ft_strjoin_free(char const *s1, char const *s2);
+char			*ft_char_string(char c);
 
 // signals
 void	ft_ignore_signals(void);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_all.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 16:00:52 by melcuman          #+#    #+#             */
-/*   Updated: 2024/09/27 19:44:14 by melcuman         ###   ########.fr       */
+/*   Updated: 2024/09/29 08:29:22 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	free_token(t_list *token)
 	tmp = token;
 	while (tmp != NULL)
 	{
-		ft_lstdelone(tmp, del);
 		token = token->next;
+		ft_lstdelone(tmp, del);
 		tmp = token;
 		printf("gecti token \n");
 	}
@@ -44,30 +44,43 @@ void	free_parse(t_parse *parse)
 	tmp = parse;
 	while (tmp != NULL)
 	{
+		parse = parse->next;
 		while (tmp->args[i] != NULL)
 			free(tmp->args[i++]);
 		free(tmp->args);
 		if (tmp->file != NULL)
 			free_file(tmp->file);
 		free(tmp);
-		parse = parse->next;
 		tmp = parse;
 	}
 	free(tmp);
+	g_minishell.nodes_p = NULL;
 }
+
+
 
 void	free_fd(t_fd *fd)
 {
-	t_fd *tmp;
-
-	tmp = fd;
-	while (tmp != NULL)
+	t_parse	*temp;
+	t_file	*file;
+	t_fd	*temp2;
+	
+	g_minishell.fd = fd;
+	temp = g_minishell.nodes_p;
+	while (temp != NULL)
 	{
-		// free(tmp);
-		fd = fd->next;
-		tmp = fd;
-		printf("gecti fd\n");
+		file = temp->file;
+		while (file)
+		{
+			temp2 = fd->next;
+			free(fd);
+			fd = temp2;
+			file = file->next;
+		}
+		temp = temp->next;
 	}
+	free(fd);
+	g_minishell.fd = NULL;
 }
 
 // clean all the stuff
@@ -80,11 +93,12 @@ void	clean_the_mess(void)
 	{
 		while (g_minishell.paths[i])
 		{
-			free(g_minishell.paths);
+			free(g_minishell.paths[i]);
 			i++;
 		}
 		free(g_minishell.paths);
 	}
+	g_minishell.paths = NULL;
 	i = 0;
 	if (g_minishell.envp)
 	{
@@ -98,18 +112,32 @@ void	clean_the_mess(void)
 	g_minishell.envp = NULL;
 }
 
+static void	free_input(void)
+{
+	int	i;
+
+	i = 0;
+	while (g_minishell.input[i])
+	{
+		printf("beni sall \n");
+		free(g_minishell.input[i]);
+		i++;
+	}
+	free(g_minishell.input);
+	g_minishell.input = NULL;
+}
+
 void	free_all(char *str)
 {
-	if (str)
-	{
+	if (g_minishell.str)
 		free(str);
-	}
+	if (g_minishell.input)
+		free_input();
 	if (g_minishell.nodes_t)
-	{
 		free_token(g_minishell.nodes_t);
-	}
 	if (g_minishell.nodes_p)
-	{
 		free_parse(g_minishell.nodes_p);
-	}
+	if (g_minishell.fd)
+		free_fd(g_minishell.fd);
+	g_minishell.token_num2 = 0;
 }

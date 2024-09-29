@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execve.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: murathanelcuman <murathanelcuman@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 18:22:46 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/27 21:47:47 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/28 15:46:27 by murathanelc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ void	ft_execute(char *full_path, char **str)
 	if (g_minishell.flag2 == 0)
 	{
 		execve(full_path, str, g_minishell.envp);
-		// ft_clean_all() -> free
-		// ft_clean_mess() -> free
+		free_all(g_minishell.str);
+		clean_the_mess();
 		print_error(str[0], ": Permission denied\n", 126);
 		exit(126);
 	}
 	else
 	{
-	//	ft_clean_all() -> free
-	//	ft_clean_mess() -> free
+		free_all(g_minishell.str);
+		clean_the_mess();
 		exit(1);
 	}
 }
@@ -86,6 +86,8 @@ char	*ft_search_path(char *str, char *path)
 	}
 	free(command);
 	print_error(str, ": command not found\n", 127);
+	free_all(g_minishell.str);
+	clean_the_mess();
 	return (NULL);
 }
 

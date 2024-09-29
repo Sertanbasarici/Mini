@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:44:46 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/24 21:19:26 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/29 08:20:40 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_list	*ft_getridof_q(t_list *nodes_t)
 	i = 0;
 	while (str[i])
 	{
-		if (ft_is_quotes_there_index(str[i]))
+		if (i == 0 || i == len - 1)
 			i++;
 		else
 			new_str[j++] = str[i++];
@@ -80,7 +80,7 @@ t_list	*ft_basic_q(t_list *nodes_t, int len)
 	new_str = malloc(sizeof(char) * (len - 1));
 	while (str[i])
 	{
-		if (ft_is_quotes_there_index(str[i]))
+		if (i == 0 || i == len)
 			i++;
 		else 
 			new_str[j++] = str[i++];
@@ -119,6 +119,6 @@ int	ft_is_quotes_there_index(char c)
 	if (c == '\'')
 		return (1);
 	else if (c == '\"')
-		return (1);
+		return (2);
 	return (0);
 }

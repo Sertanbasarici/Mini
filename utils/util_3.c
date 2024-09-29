@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 17:25:43 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/24 21:00:08 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/29 09:25:38 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,15 @@ int	ft_updated_strchr(char *str, int c)
 	}
 	return (0);
 }
-
 void	ft_modify_string(char **old, char **new)
 {
+	char *temp;
+
+	temp = ft_strdup(*new);
+	if (!temp)
+		return;
 	free(*old);
-	*old = ft_strdup(*new);
+	*old = temp;
 	free(*new);
 }
+
