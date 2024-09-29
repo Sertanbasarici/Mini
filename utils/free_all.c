@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 16:00:52 by melcuman          #+#    #+#             */
-/*   Updated: 2024/09/29 08:29:22 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/29 10:30:01 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	free_token(t_list *token)
 		token = token->next;
 		ft_lstdelone(tmp, del);
 		tmp = token;
-		printf("gecti token \n");
 	}
 	free(tmp);
 }
@@ -119,7 +118,6 @@ static void	free_input(void)
 	i = 0;
 	while (g_minishell.input[i])
 	{
-		printf("beni sall \n");
 		free(g_minishell.input[i]);
 		i++;
 	}

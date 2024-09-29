@@ -1,6 +1,6 @@
 NAME = minishell
 CC = gcc
-CFLAGS =  -Werror -Wextra -Wall -g -fsanitize=address -I.
+CFLAGS =  -Werror -Wextra -Wall -g -I.
 RM = rm -rf
 
 SRC = 	./parsing/tokenization.c \

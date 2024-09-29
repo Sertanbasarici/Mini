@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 00:07:24 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/29 09:19:13 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/29 10:11:12 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,16 +107,16 @@ char	*ft_check_string(char *str, int *i)
 	}
 	else if (*i == 0 && ft_is_quotes_there_index(str[*i]))
 	{
-		new_str =ft_substr(str, 0, ft_strlen(str));
+		new_str = ft_substr(str, 0, ft_strlen(str));
 		(*i) += ft_strlen(str);
 		return (new_str);
 	}
 	else
 	{
-		new_str = ft_convert_char_to_string(str[*i]);
+		new_str = ft_char_string(str[*i]);
 		(*i)++;
+		return (new_str);
 	}
-	return (new_str);
 }
 
 char	**ft_search_envp_vars(char **str)
@@ -132,12 +132,10 @@ char	**ft_search_envp_vars(char **str)
 	{
 		j = 0;
 		temp = ft_calloc(1, sizeof(char));
-		if (!temp)
-			return (NULL);
 		while (str[i][j])
 		{
 			check_str = ft_check_string(str[i], &j);
-			new_str = ft_strjoin(temp, new_str);
+			new_str = ft_strjoin(temp, check_str);
 			temp = ft_strdup(new_str);
 			free(check_str);
 			free(new_str);
@@ -146,7 +144,6 @@ char	**ft_search_envp_vars(char **str)
 		i++;
 		if (ft_strncmp(str[i - 1], "<<", ft_strlen("<<")) == 0 && str[i] != NULL)
 			i++;
-		// g_minishell.input = str;
 	}
 	return (str);
 }

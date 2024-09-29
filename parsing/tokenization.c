@@ -91,7 +91,7 @@ int	parse_init(char *input)
 	mini = ft_tokanazition(str, mini);
 	g_minishell.nodes_t = mini->nodes_t;
 	mini = ft_assign_special_type(mini);
-	if (ft_control_token(mini) && ft_syntax_check(mini))
+	if (ft_control_token(mini) || ft_syntax_check(mini))
 		return (1);
 	g_minishell.token_num = ft_lstprint_t(mini);
 	mini = parse(0, 1, mini);

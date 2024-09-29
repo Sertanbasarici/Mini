@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 12:27:07 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/29 07:15:32 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/29 09:53:10 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int main(int argc, char **argv, char **envp)
 		if (check_if_empty(input) == 1)
 			continue ;
 		adjsut_all(input);
-		printf("gecti\n");
 		free_all(input);
 	}
 	return 0;

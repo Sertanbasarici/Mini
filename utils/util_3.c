@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 17:25:43 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/29 09:25:38 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/29 11:38:23 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,8 @@ int	ft_updated_strchr(char *str, int c)
 }
 void	ft_modify_string(char **old, char **new)
 {
-	char *temp;
-
-	temp = ft_strdup(*new);
-	if (!temp)
-		return;
 	free(*old);
-	*old = temp;
+	*old = ft_strdup(*new);
 	free(*new);
 }
 
