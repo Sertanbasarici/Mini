@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melcuman <melcuman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 15:46:22 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/26 15:38:48 by melcuman         ###   ########.fr       */
+/*   Updated: 2024/09/29 14:41:26 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	add_arguments(t_list **token, t_parse **current)
 	int		i;
 	char	**arg;
 	
+
 	i = 0;
 	while ((*current)->args[i])
 		i++;
@@ -91,7 +92,6 @@ t_minishell	*parse(int in_file, int out_file, t_minishell *mini)
 	t_parse	*current;
 	t_list	*token;
 	t_parse	*initial;
-
 
 	token = mini->nodes_t;
 	current = init_cmd(in_file, out_file);

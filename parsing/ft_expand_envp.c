@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 00:07:24 by murathanelc       #+#    #+#             */
-/*   Updated: 2024/09/29 10:11:12 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/29 14:04:38 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ char	*ft_handle_envp_var(char **envp, char *str, int *i)
 			p++;
 			k++;
 		}
+		j++;
 	}
 	temp = ft_check_envp_exit_stat(str, i);
 	return (temp);
@@ -103,6 +104,7 @@ char	*ft_check_string(char *str, int *i)
 	if (str[*i] == '$')
 	{
 		(*i)++;
+		printf("gecti\n");
 		return (ft_handle_envp_var(envp, str, i));
 	}
 	else if (*i == 0 && ft_is_quotes_there_index(str[*i]))
@@ -134,8 +136,10 @@ char	**ft_search_envp_vars(char **str)
 		temp = ft_calloc(1, sizeof(char));
 		while (str[i][j])
 		{
+			
 			check_str = ft_check_string(str[i], &j);
 			new_str = ft_strjoin(temp, check_str);
+			free(temp);
 			temp = ft_strdup(new_str);
 			free(check_str);
 			free(new_str);

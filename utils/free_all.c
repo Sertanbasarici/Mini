@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 16:00:52 by melcuman          #+#    #+#             */
-/*   Updated: 2024/09/29 10:30:01 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/29 14:30:36 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,13 @@ void	free_parse(t_parse *parse)
 	tmp = parse;
 	while (tmp != NULL)
 	{
+		i = 0;
 		parse = parse->next;
 		while (tmp->args[i] != NULL)
-			free(tmp->args[i++]);
+		{
+			free(tmp->args[i]);
+			i++;
+		}
 		free(tmp->args);
 		if (tmp->file != NULL)
 			free_file(tmp->file);
@@ -134,7 +138,9 @@ void	free_all(char *str)
 	if (g_minishell.nodes_t)
 		free_token(g_minishell.nodes_t);
 	if (g_minishell.nodes_p)
+	{
 		free_parse(g_minishell.nodes_p);
+	}
 	if (g_minishell.fd)
 		free_fd(g_minishell.fd);
 	g_minishell.token_num2 = 0;

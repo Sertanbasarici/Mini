@@ -19,6 +19,7 @@ char	*double_quotes_dollar(char **env, char *input)
 	char	*var;
 	int		i;
 
+
 	new_str = ft_strdup("");
 	i = 0;
 	while (input[i])
@@ -35,7 +36,7 @@ char	*double_quotes_dollar(char **env, char *input)
 			continue;
 		}
 		char_str = ft_char_string(input[i]);
-		new_str = ft_strjoin(new_str, char_str);
+		new_str = ft_strjoin_free(new_str, char_str);
 		free(char_str);
 		i++;
 	}
@@ -64,7 +65,10 @@ int	ft_control_token(t_minishell *mini)
 				tmp = add_q_to_nodes(&i, str, tmp);
 			if (ft_is_quotes_there_index(str[i]) == 2)
 			{
+				
 				str = double_quotes_dollar(g_minishell.envp, str);
+				if (tmp->content != NULL)
+					free(tmp->content);
 				tmp->content = str;
 				tmp = add_q_to_nodes(&i, str, tmp);
 			}
@@ -91,6 +95,7 @@ int	parse_init(char *input)
 	mini = ft_tokanazition(str, mini);
 	g_minishell.nodes_t = mini->nodes_t;
 	mini = ft_assign_special_type(mini);
+	ft_control_token(mini);
 	if (ft_control_token(mini) || ft_syntax_check(mini))
 		return (1);
 	g_minishell.token_num = ft_lstprint_t(mini);

@@ -6,7 +6,7 @@
 /*   By: sebasari <sebasari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:07:13 by sebasari          #+#    #+#             */
-/*   Updated: 2024/09/29 08:24:09 by sebasari         ###   ########.fr       */
+/*   Updated: 2024/09/29 13:30:10 by sebasari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,6 @@ t_list			*add_q_to_nodes(int *index, char *input, t_list *mini_list);
 int				ft_find_next_q(int start, char *input);
 t_list			*ft_getridof_q(t_list *nodes_t);
 t_list			*ft_basic_q(t_list *nodes_t, int	len);
-int				ft_dollar_len(char *str);
-char			*ft_dollar_sign(char *str);
 
 // tokenizations
 int				parse_init(char *input);
